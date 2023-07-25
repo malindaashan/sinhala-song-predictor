@@ -2,11 +2,26 @@ package com.msc.sinhalasongpredictorbackend.service;
 
 import com.msc.sinhalasongpredictorbackend.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import weka.clusterers.Clusterer;
+import weka.core.Instance;
+import weka.core.Instances;
+import weka.core.SerializationHelper;
+import weka.core.converters.CSVLoader;
+
+import java.io.File;
+import java.util.HashMap;
 
 @Service
 public class ClusterService {
+
+    @Value("${cluster.kmeans.modal.location}")
+    private String kMeansModalLocation;
+
+    @Value("${feature.csv.output}")
+    private String csvFeatureOutput;
     private static final String K_MEANS = "K-Means";
     private static final String K_MEANS_MODEL_SAVE_PATH = "C:\\Users\\MalindaPieris\\Documents\\MscResearch\\Sinhala-Audio-Classfication-notebooks\\notebooks\\models\\k-means\\model-kmeans.model";
 
@@ -35,6 +50,19 @@ public class ClusterService {
         return "Done";
     }
 
-    private void runKMeans() {
+    private void runKMeans() throws Exception {
+        Clusterer clusterer = (Clusterer) SerializationHelper.read(kMeansModalLocation);
+        CSVLoader loader = new CSVLoader();
+        loader.setSource(new File(csvFeatureOutput));
+
+        Instances trainingDataSet = loader.getDataSet();
+
+        for (Instance i : trainingDataSet) {
+            int result = clusterer.clusterInstance(i);
+            //countMap.put(result, countMap.getOrDefault(result, 0) + 1);
+            System.out.println(result);
+            System.out.println(i);
+        }
+
     }
 }

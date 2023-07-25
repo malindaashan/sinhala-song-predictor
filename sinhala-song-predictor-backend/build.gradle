@@ -22,6 +22,9 @@ dependencies {
 	implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.3.3'
 	compileOnly 'org.projectlombok:lombok:1.18.22'
 	annotationProcessor 'org.projectlombok:lombok:1.18.22'
+	implementation group: 'com.opencsv', name: 'opencsv', version: '5.7.1'
+	implementation group: 'nz.ac.waikato.cms.weka', name: 'weka-stable', version: '3.8.6'
+
 
 
 }
