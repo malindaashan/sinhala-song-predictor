@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+
 @Service
 public class ClusterService {
     private static final String K_MEANS= "K-Means";
@@ -13,7 +15,19 @@ public class ClusterService {
     @Autowired
     CommonUtil commonUtil;
     public String predictCluster(MultipartFile multipartFile, String algorithm) throws Exception {
+        //save mp3 file
         commonUtil.saveMP3File(multipartFile);
+
+
+        //trim and convert mp3 file wav
+        commonUtil.convertMP3Wav(multipartFile.getOriginalFilename());
+
+        //trim mp3
+        commonUtil.trimMP3(multipartFile.getOriginalFilename());
+
+        //extract features
+        commonUtil.extractFeatures(multipartFile.getOriginalFilename());
+
         if(K_MEANS.equalsIgnoreCase(algorithm)){
             runKMeans();
         }

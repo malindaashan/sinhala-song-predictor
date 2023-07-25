@@ -27,6 +27,7 @@ const Clusterer = () => {
 
         return (
             <Box id="clusterer" className="clusterer">
+                <h1> Clusterer</h1>
                 <br/><br/><br/>
                 <Grid container>
                     <Grid item xs={12} sm={6} md={3}>
