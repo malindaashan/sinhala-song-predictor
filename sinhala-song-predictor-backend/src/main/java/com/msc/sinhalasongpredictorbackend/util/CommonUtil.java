@@ -1,10 +1,14 @@
 package com.msc.sinhalasongpredictorbackend.util;
 
+import com.msc.sinhalasongpredictorbackend.modal.FeatureVectorFile;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.w3c.dom.Document;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -17,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+
 
 @Component
 public class CommonUtil {
@@ -38,6 +43,9 @@ public class CommonUtil {
 
     @Value("${jaudio.sample.batch.xml}")
     private String jAudioSampleBatchXml;
+
+    @Value("${jaudio.feature.output.xml}")
+    private String jAudioFeaturesXml;
 
     public void trimMP3(String fileName) throws Exception {
         //ffmpeg -ss 00:00:00.000 -i "output3.wav" -t 90 -map 0 -c copy "output31.wav"
@@ -121,5 +129,14 @@ public class CommonUtil {
         is.read(b, 0, b.length);
         System.out.println("log out from jAudio");
         System.out.println(new String(b));
+    }
+
+    public void readAudioFeatureXml() throws JAXBException {
+        File xmlFile = new File(String.valueOf(Path.of(jAudioFeaturesXml)));
+
+        JAXBContext jaxbContext = JAXBContext.newInstance(FeatureVectorFile.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+        FeatureVectorFile featureVectorFile = (FeatureVectorFile) jaxbUnmarshaller.unmarshal(xmlFile);
+        System.out.println("===============================");
     }
 }

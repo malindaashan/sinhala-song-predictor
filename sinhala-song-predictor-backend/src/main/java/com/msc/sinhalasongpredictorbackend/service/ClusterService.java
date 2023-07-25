@@ -5,15 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-
 @Service
 public class ClusterService {
-    private static final String K_MEANS= "K-Means";
-    private static final String K_MEANS_MODEL_SAVE_PATH="C:\\Users\\MalindaPieris\\Documents\\MscResearch\\Sinhala-Audio-Classfication-notebooks\\notebooks\\models\\k-means\\model-kmeans.model";
+    private static final String K_MEANS = "K-Means";
+    private static final String K_MEANS_MODEL_SAVE_PATH = "C:\\Users\\MalindaPieris\\Documents\\MscResearch\\Sinhala-Audio-Classfication-notebooks\\notebooks\\models\\k-means\\model-kmeans.model";
 
     @Autowired
     CommonUtil commonUtil;
+
     public String predictCluster(MultipartFile multipartFile, String algorithm) throws Exception {
         //save mp3 file
         commonUtil.saveMP3File(multipartFile);
@@ -28,7 +27,9 @@ public class ClusterService {
         //extract features
         commonUtil.extractFeatures(multipartFile.getOriginalFilename());
 
-        if(K_MEANS.equalsIgnoreCase(algorithm)){
+        //convert features to csv
+        commonUtil.readAudioFeatureXml();
+        if (K_MEANS.equalsIgnoreCase(algorithm)) {
             runKMeans();
         }
         return "Done";
