@@ -18,7 +18,7 @@ public class DataSet {
     public List<Feature> getFeatureList() {
         return featureList;
     }
-
+    @XmlElement(name = "feature")
     public void setFeatureList(List<Feature> featureList) {
         this.featureList = featureList;
     }

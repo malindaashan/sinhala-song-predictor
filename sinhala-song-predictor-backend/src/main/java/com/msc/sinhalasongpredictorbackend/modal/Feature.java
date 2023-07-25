@@ -1,10 +1,12 @@
 package com.msc.sinhalasongpredictorbackend.modal;
 
 import javax.xml.bind.annotation.XmlElement;
+import java.util.List;
+
 public class Feature {
 
     private String name;
-    private String val;
+    private List<String> values;
 
     public String getName() {
         return name;
@@ -13,12 +15,11 @@ public class Feature {
     public void setName(String name) {
         this.name = name;
     }
-
-    public String getVal() {
-        return val;
-    }
     @XmlElement(name = "v")
-    public void setVal(String val) {
-        this.val = val;
+    public List<String> getValues() {
+        return values;
+    }
+    public void setValues(List<String> values) {
+        this.values = values;
     }
 }

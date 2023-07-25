@@ -19,7 +19,7 @@ public class FeatureVectorFile {
     public DataSet getDataSet() {
         return dataSet;
     }
-    @XmlElement(name = "data_set_id")
+    @XmlElement(name = "data_set")
     public void setDataSet(DataSet dataSet) {
         this.dataSet = dataSet;
     }
