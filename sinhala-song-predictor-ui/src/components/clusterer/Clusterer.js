@@ -7,15 +7,17 @@ import ClustererService from "../../service/ClustererService";
 const Clusterer = () => {
     const [selectedAlgorithm, setSelectedAlgorithm] = React.useState("K-means")
     const [selectedFile, setSelectedFile] = React.useState();
+    const [result, setResult] = React.useState(null);
     const handleClusterAlgoChange = (event) => {
         setSelectedAlgorithm(event.target.value)
     }
 
     function executeClusterer() {
+        setResult("Loading.....")
         ClustererService.predictCluster(selectedAlgorithm,selectedFile)
             .then((response) => {
                 if (response.success) {
-                    alert("success");
+                    setResult(response.data);
                 } else {
                     alert("Failed");
                 }
@@ -58,7 +60,8 @@ const Clusterer = () => {
                             style={{marginTop: "20px"}} onClick={() => executeClusterer()}>SHOW CLUSTER</Button>
                 </Grid>
                 <Grid container justifyContent="center">
-                    <h1>Result is</h1>
+                    <h1>Result is: {result}</h1>
+
                 </Grid>
             </Box>
         )

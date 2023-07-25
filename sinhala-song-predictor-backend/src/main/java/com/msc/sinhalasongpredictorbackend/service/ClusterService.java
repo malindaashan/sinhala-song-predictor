@@ -12,7 +12,6 @@ import weka.core.SerializationHelper;
 import weka.core.converters.CSVLoader;
 
 import java.io.File;
-import java.util.HashMap;
 
 @Service
 public class ClusterService {
@@ -28,7 +27,7 @@ public class ClusterService {
     @Autowired
     CommonUtil commonUtil;
 
-    public String predictCluster(MultipartFile multipartFile, String algorithm) throws Exception {
+    public int predictCluster(MultipartFile multipartFile, String algorithm) throws Exception {
         //save mp3 file
         commonUtil.saveMP3File(multipartFile);
 
@@ -45,12 +44,12 @@ public class ClusterService {
         //convert features to csv
         commonUtil.readAudioFeatureXml();
         if (K_MEANS.equalsIgnoreCase(algorithm)) {
-            runKMeans();
+            return runKMeans();
         }
-        return "Done";
+        return -1;
     }
 
-    private void runKMeans() throws Exception {
+    private int runKMeans() throws Exception {
         Clusterer clusterer = (Clusterer) SerializationHelper.read(kMeansModalLocation);
         CSVLoader loader = new CSVLoader();
         loader.setSource(new File(csvFeatureOutput));
@@ -62,7 +61,9 @@ public class ClusterService {
             //countMap.put(result, countMap.getOrDefault(result, 0) + 1);
             System.out.println(result);
             System.out.println(i);
+            return result;
         }
 
+        return -1;
     }
 }
