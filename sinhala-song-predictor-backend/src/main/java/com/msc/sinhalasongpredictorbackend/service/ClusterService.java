@@ -1,5 +1,6 @@
 package com.msc.sinhalasongpredictorbackend.service;
 
+import com.msc.sinhalasongpredictorbackend.modal.FeatureVectorFile;
 import com.msc.sinhalasongpredictorbackend.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +12,8 @@ import weka.core.Instances;
 import weka.core.SerializationHelper;
 import weka.core.converters.CSVLoader;
 
-import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
 @Service
 public class ClusterService {
@@ -22,7 +24,6 @@ public class ClusterService {
     @Value("${feature.csv.output}")
     private String csvFeatureOutput;
     private static final String K_MEANS = "K-Means";
-    private static final String K_MEANS_MODEL_SAVE_PATH = "C:\\Users\\MalindaPieris\\Documents\\MscResearch\\Sinhala-Audio-Classfication-notebooks\\notebooks\\models\\k-means\\model-kmeans.model";
 
     @Autowired
     CommonUtil commonUtil;
@@ -42,7 +43,8 @@ public class ClusterService {
         commonUtil.extractFeatures(multipartFile.getOriginalFilename());
 
         //convert features to csv
-        commonUtil.readAudioFeatureXml();
+       FeatureVectorFile featureVectorFile = commonUtil.readAudioFeatureXml();
+       commonUtil.createCsv(featureVectorFile);
         if (K_MEANS.equalsIgnoreCase(algorithm)) {
             return runKMeans();
         }
@@ -52,18 +54,24 @@ public class ClusterService {
     private int runKMeans() throws Exception {
         Clusterer clusterer = (Clusterer) SerializationHelper.read(kMeansModalLocation);
         CSVLoader loader = new CSVLoader();
-        loader.setSource(new File(csvFeatureOutput));
+        try (InputStream fis = new FileInputStream(csvFeatureOutput)) {
+            loader.setSource(fis);
 
-        Instances trainingDataSet = loader.getDataSet();
+            Instances trainingDataSet = loader.getDataSet();
 
-        for (Instance i : trainingDataSet) {
-            int result = clusterer.clusterInstance(i);
-            //countMap.put(result, countMap.getOrDefault(result, 0) + 1);
-            System.out.println(result);
-            System.out.println(i);
-            return result;
+            for (Instance i : trainingDataSet) {
+                int result = clusterer.clusterInstance(i);
+                //countMap.put(result, countMap.getOrDefault(result, 0) + 1);
+                System.out.println(result);
+                System.out.println(i);
+                return result;
+            }
+
+            return -1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
 
-        return -1;
     }
 }

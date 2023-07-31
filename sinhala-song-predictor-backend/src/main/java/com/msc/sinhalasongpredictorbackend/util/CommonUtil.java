@@ -138,17 +138,17 @@ public class CommonUtil {
         System.out.println(new String(b));
     }
 
-    public void readAudioFeatureXml() throws JAXBException, IOException {
+    public FeatureVectorFile readAudioFeatureXml() throws JAXBException, IOException {
         File xmlFile = new File(String.valueOf(Path.of(jAudioFeaturesXml)));
 
         JAXBContext jaxbContext = JAXBContext.newInstance(FeatureVectorFile.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         FeatureVectorFile featureVectorFile = (FeatureVectorFile) jaxbUnmarshaller.unmarshal(xmlFile);
-        createCsv(featureVectorFile);
         System.out.println("===============================");
+        return featureVectorFile;
     }
 
-    private void createCsv(FeatureVectorFile featureVectorFile) throws IOException {
+    public void createCsv(FeatureVectorFile featureVectorFile) throws IOException {
         File file = new File(csvFeatureOutput);
         // create FileWriter object with file as parameter
         FileWriter outputfile = new FileWriter(file);
