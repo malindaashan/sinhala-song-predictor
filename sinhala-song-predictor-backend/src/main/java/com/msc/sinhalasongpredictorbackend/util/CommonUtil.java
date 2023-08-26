@@ -1,5 +1,6 @@
 package com.msc.sinhalasongpredictorbackend.util;
 
+import com.msc.sinhalasongpredictorbackend.modal.DataSet;
 import com.msc.sinhalasongpredictorbackend.modal.Feature;
 import com.msc.sinhalasongpredictorbackend.modal.FeatureVectorFile;
 import com.opencsv.CSVWriter;
@@ -7,7 +8,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
+import javax.xml.bind.Element;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -110,11 +113,15 @@ public class CommonUtil {
     }
 
     public void extractFeatures(String fileName) throws Exception {
+        System.out.println("Started Extract Features......");
         String fileDestPath = outputFileSavePath + File.separator + fileName.replaceAll("\\s", "").replace(".mp3", ".wav");
         File xmlFile = new File(jAudioSampleBatchXml);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(xmlFile);
+//        for(int i=0;i < doc.getElementsByTagName("file").getLength();i++){
+//            doc.getElementsByTagName("file").item(i).getParentNode().removeChild();
+//        }
         doc.getElementsByTagName("file").item(0).getFirstChild().setNodeValue(fileDestPath);
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
@@ -123,9 +130,10 @@ public class CommonUtil {
         transformer.transform(source, streamResult);
 
         File dir = new File(jAudioJarPath + File.separator);
-        String cmd = "java -jar jAudio-1.0.4.jar -b batch-sample-file.xml";
+        String cmd = "java -jar jAudio-1.0.4.jar -b bdone.xml";
         Process ps = Runtime.getRuntime().exec(cmd, null, dir);
         java.io.InputStream is = ps.getInputStream();
+        System.out.println("Executing jAudio.jar.. Please wait");
         int exitCode = ps.waitFor();
         if (exitCode == 0) {
             System.out.println("JAR file executed successfully.");
@@ -140,6 +148,15 @@ public class CommonUtil {
 
     public FeatureVectorFile readAudioFeatureXml() throws JAXBException, IOException {
         File xmlFile = new File(String.valueOf(Path.of(jAudioFeaturesXml)));
+
+        JAXBContext jaxbContext = JAXBContext.newInstance(FeatureVectorFile.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+        FeatureVectorFile featureVectorFile = (FeatureVectorFile) jaxbUnmarshaller.unmarshal(xmlFile);
+        System.out.println("===============================");
+        return featureVectorFile;
+    }
+    public FeatureVectorFile readAudioFeatureXml(String path) throws JAXBException, IOException {
+        File xmlFile = new File(String.valueOf(Path.of(path)));
 
         JAXBContext jaxbContext = JAXBContext.newInstance(FeatureVectorFile.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
