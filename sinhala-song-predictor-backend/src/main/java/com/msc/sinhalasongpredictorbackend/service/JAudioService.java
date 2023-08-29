@@ -78,4 +78,26 @@ public class JAudioService {
 
         writer.writeNext(dataArray);
     }
+
+    public void extractJAudioFeaturesFromBulkAudioPath(String path) {
+        try {
+            File files = new File(path);
+            File csvFile = new File(csvFeatureOutput);
+            FileWriter outputfile = new FileWriter(csvFile);
+            CSVWriter writer = new CSVWriter(outputfile);
+            writer.writeNext(commonUtil.getCSVHeaders());
+            for (File file : files.listFiles()) {
+                System.out.println("Processing "+file.getName());
+                //extract features
+                commonUtil.extractFeatures(file);
+                //convert features to csv
+                FeatureVectorFile featureVectorFile = commonUtil.readAudioFeatureXml();
+                writer.writeNext(commonUtil.getFeatureData(featureVectorFile).toArray(new String[0]));
+            }
+            writer.close();
+        } catch (Exception e) {
+            System.out.println("Error Occurred while executing extractJAudioFeaturesFromBulkAudioPath");
+            e.printStackTrace();
+        }
+    }
 }

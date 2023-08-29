@@ -1,6 +1,5 @@
 package com.msc.sinhalasongpredictorbackend.util;
 
-import com.msc.sinhalasongpredictorbackend.modal.DataSet;
 import com.msc.sinhalasongpredictorbackend.modal.Feature;
 import com.msc.sinhalasongpredictorbackend.modal.FeatureVectorFile;
 import com.opencsv.CSVWriter;
@@ -8,9 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 
-import javax.xml.bind.Element;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -119,10 +116,50 @@ public class CommonUtil {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(xmlFile);
-//        for(int i=0;i < doc.getElementsByTagName("file").getLength();i++){
-//            doc.getElementsByTagName("file").item(i).getParentNode().removeChild();
+
+//        NodeList nodesFile = doc.getElementsByTagName("file");
+//        for (int i = 0; i < nodesFile.getLength(); i++) {
+//            Node n = nodesFile.item(i);
+//            doc.getElementsByTagName("file").item(i).removeChild(n);
 //        }
         doc.getElementsByTagName("file").item(0).getFirstChild().setNodeValue(fileDestPath);
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        DOMSource source = new DOMSource(doc);
+        StreamResult streamResult = new StreamResult(new File(jAudioSampleBatchXml));
+        transformer.transform(source, streamResult);
+
+        File dir = new File(jAudioJarPath + File.separator);
+        String cmd = "java -jar jAudio-1.0.4.jar -b bdone.xml";
+        Process ps = Runtime.getRuntime().exec(cmd, null, dir);
+        java.io.InputStream is = ps.getInputStream();
+        System.out.println("Executing jAudio.jar.. Please wait");
+        int exitCode = ps.waitFor();
+        if (exitCode == 0) {
+            System.out.println("JAR file executed successfully.");
+        } else {
+            System.out.println("Error executing JAR file. Exit code: " + exitCode);
+        }
+        byte b[] = new byte[is.available()];
+        is.read(b, 0, b.length);
+        System.out.println("log out from jAudio");
+        System.out.println(new String(b));
+    }
+
+    public void extractFeatures(File file) throws Exception {
+        System.out.println("Started Extract Features......");
+        //String fileDestPath = outputFileSavePath + File.separator + fileName.replaceAll("\\s", "").replace(".mp3", ".wav");
+        File xmlFile = new File(jAudioSampleBatchXml);
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document doc = builder.parse(xmlFile);
+
+//        NodeList nodesFile = doc.getElementsByTagName("file");
+//        for (int i = 0; i < nodesFile.getLength(); i++) {
+//            Node n = nodesFile.item(i);
+//            doc.getElementsByTagName("file").item(i).removeChild(n);
+//        }
+        doc.getElementsByTagName("file").item(0).getFirstChild().setNodeValue(file.getAbsolutePath());
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource source = new DOMSource(doc);
@@ -205,5 +242,46 @@ public class CommonUtil {
         String[] dataArray = data.toArray(new String[0]);
         writer.writeNext(dataArray);
         writer.close();
+    }
+
+    public ArrayList<String> getFeatureData(FeatureVectorFile featureVectorFile) throws IOException {
+
+        ArrayList<String> data = new ArrayList<String>();
+        for (Feature feature : featureVectorFile.getDataSet().getFeatureList()) {
+            for (String value : feature.getValues()) {
+
+                data.add(value);
+            }
+        }
+        return data;
+//        String[] dataArray = data.toArray(new String[0]);
+//        writer.writeNext(dataArray);
+//        writer.close();
+    }
+
+    public String[] getCSVHeaders(){
+        String[] header = {"SpectralCentroidOverallStandardDeviation", "SpectralRolloffPointOverallStandardDeviation",
+                "SpectralFluxOverallStandardDeviation", "CompactnessOverallStandardDeviation", "SpectralVariabilityOverallStandardDeviation",
+                "RootMeanSquareOverallStandardDeviation", "FractionOfLowEnergyWindowsOverallStandardDeviation", "ZeroCrossingsOverallStandardDeviation",
+                "StrongestBeatOverallStandardDeviation", "BeatSumOverallStandardDeviation", "StrengthOfStrongestBeatOverallStandardDeviation", "LPCOverallStandardDeviation/v/0",
+                "LPCOverallStandardDeviation/v/1", "LPCOverallStandardDeviation/v/2", "LPCOverallStandardDeviation/v/3", "LPCOverallStandardDeviation/v/4",
+                "LPCOverallStandardDeviation/v/5", "LPCOverallStandardDeviation/v/6", "LPCOverallStandardDeviation/v/7", "LPCOverallStandardDeviation/v/8",
+                "LPCOverallStandardDeviation/v/9", "MethodofMomentsOverallStandardDeviation/v/0", "MethodofMomentsOverallStandardDeviation/v/1",
+                "MethodofMomentsOverallStandardDeviation/v/2", "MethodofMomentsOverallStandardDeviation/v/3", "MethodofMomentsOverallStandardDeviation/v/4",
+                "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/0", "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/1",
+                "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/2", "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/3",
+                "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/4", "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/5", "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/6",
+                "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/7", "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/8",
+                "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/9", "SpectralCentroidOverallAverage", "SpectralRolloffPointOverallAverage",
+                "SpectralFluxOverallAverage", "CompactnessOverallAverage", "SpectralVariabilityOverallAverage", "RootMeanSquareOverallAverage",
+                "FractionOfLowEnergyWindowsOverallAverage", "ZeroCrossingsOverallAverage", "StrongestBeatOverallAverage", "BeatSumOverallAverage",
+                "StrengthOfStrongestBeatOverallAverage", "LPCOverallAverage/v/0", "LPCOverallAverage/v/1", "LPCOverallAverage/v/2", "LPCOverallAverage/v/3",
+                "LPCOverallAverage/v/4", "LPCOverallAverage/v/5", "LPCOverallAverage/v/6", "LPCOverallAverage/v/7", "LPCOverallAverage/v/8",
+                "LPCOverallAverage/v/9", "MethodofMomentsOverallAverage/v/0", "MethodofMomentsOverallAverage/v/1", "MethodofMomentsOverallAverage/v/2",
+                "MethodofMomentsOverallAverage/v/3", "MethodofMomentsOverallAverage/v/4", "AreaMethodofMomentsofMFCCsOverallAverage/v/0",
+                "AreaMethodofMomentsofMFCCsOverallAverage/v/1", "AreaMethodofMomentsofMFCCsOverallAverage/v/2", "AreaMethodofMomentsofMFCCsOverallAverage/v/3",
+                "AreaMethodofMomentsofMFCCsOverallAverage/v/4", "AreaMethodofMomentsofMFCCsOverallAverage/v/5", "AreaMethodofMomentsofMFCCsOverallAverage/v/6",
+                "AreaMethodofMomentsofMFCCsOverallAverage/v/7", "AreaMethodofMomentsofMFCCsOverallAverage/v/8", "AreaMethodofMomentsofMFCCsOverallAverage/v/9"};
+    return header;
     }
 }

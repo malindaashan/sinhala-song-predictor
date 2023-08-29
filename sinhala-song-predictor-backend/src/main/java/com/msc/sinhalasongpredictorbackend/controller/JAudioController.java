@@ -19,4 +19,13 @@ public class JAudioController {
             e.printStackTrace();
         }
     }
+    //extract features of audios which are residing in specific path
+    @PostMapping("/extract-features-bulk")
+    public void extractJAudioFeaturesSeparated(@RequestBody JAudioBulkRequest body) {
+        try{
+            jAudioService.extractJAudioFeaturesFromBulkAudioPath(body.getPath());
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 }
