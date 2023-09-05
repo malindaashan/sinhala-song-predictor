@@ -130,7 +130,7 @@ public class CommonUtil {
         transformer.transform(source, streamResult);
 
         File dir = new File(jAudioJarPath + File.separator);
-        String cmd = "java -jar jAudio-1.0.4.jar -b bdone.xml";
+        String cmd = "java -jar jAudio-1.0.4.jar -b bdone";
         Process ps = Runtime.getRuntime().exec(cmd, null, dir);
         java.io.InputStream is = ps.getInputStream();
         System.out.println("Executing jAudio.jar.. Please wait");
@@ -209,28 +209,7 @@ public class CommonUtil {
 
         // create CSVWriter object filewriter object as parameter
         CSVWriter writer = new CSVWriter(outputfile);
-        String[] header = {"SpectralCentroidOverallStandardDeviation", "SpectralRolloffPointOverallStandardDeviation",
-                "SpectralFluxOverallStandardDeviation", "CompactnessOverallStandardDeviation", "SpectralVariabilityOverallStandardDeviation",
-                "RootMeanSquareOverallStandardDeviation", "FractionOfLowEnergyWindowsOverallStandardDeviation", "ZeroCrossingsOverallStandardDeviation",
-                "StrongestBeatOverallStandardDeviation", "BeatSumOverallStandardDeviation", "StrengthOfStrongestBeatOverallStandardDeviation", "LPCOverallStandardDeviation/v/0",
-                "LPCOverallStandardDeviation/v/1", "LPCOverallStandardDeviation/v/2", "LPCOverallStandardDeviation/v/3", "LPCOverallStandardDeviation/v/4",
-                "LPCOverallStandardDeviation/v/5", "LPCOverallStandardDeviation/v/6", "LPCOverallStandardDeviation/v/7", "LPCOverallStandardDeviation/v/8",
-                "LPCOverallStandardDeviation/v/9", "MethodofMomentsOverallStandardDeviation/v/0", "MethodofMomentsOverallStandardDeviation/v/1",
-                "MethodofMomentsOverallStandardDeviation/v/2", "MethodofMomentsOverallStandardDeviation/v/3", "MethodofMomentsOverallStandardDeviation/v/4",
-                "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/0", "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/1",
-                "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/2", "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/3",
-                "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/4", "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/5", "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/6",
-                "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/7", "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/8",
-                "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/9", "SpectralCentroidOverallAverage", "SpectralRolloffPointOverallAverage",
-                "SpectralFluxOverallAverage", "CompactnessOverallAverage", "SpectralVariabilityOverallAverage", "RootMeanSquareOverallAverage",
-                "FractionOfLowEnergyWindowsOverallAverage", "ZeroCrossingsOverallAverage", "StrongestBeatOverallAverage", "BeatSumOverallAverage",
-                "StrengthOfStrongestBeatOverallAverage", "LPCOverallAverage/v/0", "LPCOverallAverage/v/1", "LPCOverallAverage/v/2", "LPCOverallAverage/v/3",
-                "LPCOverallAverage/v/4", "LPCOverallAverage/v/5", "LPCOverallAverage/v/6", "LPCOverallAverage/v/7", "LPCOverallAverage/v/8",
-                "LPCOverallAverage/v/9", "MethodofMomentsOverallAverage/v/0", "MethodofMomentsOverallAverage/v/1", "MethodofMomentsOverallAverage/v/2",
-                "MethodofMomentsOverallAverage/v/3", "MethodofMomentsOverallAverage/v/4", "AreaMethodofMomentsofMFCCsOverallAverage/v/0",
-                "AreaMethodofMomentsofMFCCsOverallAverage/v/1", "AreaMethodofMomentsofMFCCsOverallAverage/v/2", "AreaMethodofMomentsofMFCCsOverallAverage/v/3",
-                "AreaMethodofMomentsofMFCCsOverallAverage/v/4", "AreaMethodofMomentsofMFCCsOverallAverage/v/5", "AreaMethodofMomentsofMFCCsOverallAverage/v/6",
-                "AreaMethodofMomentsofMFCCsOverallAverage/v/7", "AreaMethodofMomentsofMFCCsOverallAverage/v/8", "AreaMethodofMomentsofMFCCsOverallAverage/v/9"};
+        String[] header = getCSVHeaders();
         writer.writeNext(header);
         ArrayList<String> data = new ArrayList<String>();
         for (Feature feature : featureVectorFile.getDataSet().getFeatureList()) {
@@ -260,28 +239,48 @@ public class CommonUtil {
     }
 
     public String[] getCSVHeaders(){
-        String[] header = {"SpectralCentroidOverallStandardDeviation", "SpectralRolloffPointOverallStandardDeviation",
-                "SpectralFluxOverallStandardDeviation", "CompactnessOverallStandardDeviation", "SpectralVariabilityOverallStandardDeviation",
-                "RootMeanSquareOverallStandardDeviation", "FractionOfLowEnergyWindowsOverallStandardDeviation", "ZeroCrossingsOverallStandardDeviation",
-                "StrongestBeatOverallStandardDeviation", "BeatSumOverallStandardDeviation", "StrengthOfStrongestBeatOverallStandardDeviation", "LPCOverallStandardDeviation/v/0",
-                "LPCOverallStandardDeviation/v/1", "LPCOverallStandardDeviation/v/2", "LPCOverallStandardDeviation/v/3", "LPCOverallStandardDeviation/v/4",
-                "LPCOverallStandardDeviation/v/5", "LPCOverallStandardDeviation/v/6", "LPCOverallStandardDeviation/v/7", "LPCOverallStandardDeviation/v/8",
-                "LPCOverallStandardDeviation/v/9", "MethodofMomentsOverallStandardDeviation/v/0", "MethodofMomentsOverallStandardDeviation/v/1",
-                "MethodofMomentsOverallStandardDeviation/v/2", "MethodofMomentsOverallStandardDeviation/v/3", "MethodofMomentsOverallStandardDeviation/v/4",
-                "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/0", "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/1",
-                "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/2", "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/3",
-                "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/4", "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/5", "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/6",
-                "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/7", "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/8",
-                "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/9", "SpectralCentroidOverallAverage", "SpectralRolloffPointOverallAverage",
-                "SpectralFluxOverallAverage", "CompactnessOverallAverage", "SpectralVariabilityOverallAverage", "RootMeanSquareOverallAverage",
-                "FractionOfLowEnergyWindowsOverallAverage", "ZeroCrossingsOverallAverage", "StrongestBeatOverallAverage", "BeatSumOverallAverage",
-                "StrengthOfStrongestBeatOverallAverage", "LPCOverallAverage/v/0", "LPCOverallAverage/v/1", "LPCOverallAverage/v/2", "LPCOverallAverage/v/3",
-                "LPCOverallAverage/v/4", "LPCOverallAverage/v/5", "LPCOverallAverage/v/6", "LPCOverallAverage/v/7", "LPCOverallAverage/v/8",
-                "LPCOverallAverage/v/9", "MethodofMomentsOverallAverage/v/0", "MethodofMomentsOverallAverage/v/1", "MethodofMomentsOverallAverage/v/2",
-                "MethodofMomentsOverallAverage/v/3", "MethodofMomentsOverallAverage/v/4", "AreaMethodofMomentsofMFCCsOverallAverage/v/0",
-                "AreaMethodofMomentsofMFCCsOverallAverage/v/1", "AreaMethodofMomentsofMFCCsOverallAverage/v/2", "AreaMethodofMomentsofMFCCsOverallAverage/v/3",
-                "AreaMethodofMomentsofMFCCsOverallAverage/v/4", "AreaMethodofMomentsofMFCCsOverallAverage/v/5", "AreaMethodofMomentsofMFCCsOverallAverage/v/6",
-                "AreaMethodofMomentsofMFCCsOverallAverage/v/7", "AreaMethodofMomentsofMFCCsOverallAverage/v/8", "AreaMethodofMomentsofMFCCsOverallAverage/v/9"};
-    return header;
+        return new String[]{"SpectralCentroidOverallStandardDeviation", "SpectralRolloffPointOverallStandardDeviation",
+                "SpectralFluxOverallStandardDeviation", "CompactnessOverallStandardDeviation",
+                "SpectralVariabilityOverallStandardDeviation",
+                "RootMeanSquareOverallStandardDeviation", "FractionOfLowEnergyWindowsOverallStandardDeviation",
+                "ZeroCrossingsOverallStandardDeviation", "StrongestBeatOverallStandardDeviation",
+                "BeatSumOverallStandardDeviation", "StrengthOfStrongestBeatOverallStandardDeviation",
+                "LPCOverallStandardDeviation/v/0", "LPCOverallStandardDeviation/v/1", "LPCOverallStandardDeviation/v/2",
+                "LPCOverallStandardDeviation/v/3", "LPCOverallStandardDeviation/v/4", "LPCOverallStandardDeviation/v/5",
+                "LPCOverallStandardDeviation/v/6", "LPCOverallStandardDeviation/v/7", "LPCOverallStandardDeviation/v/8",
+                "LPCOverallStandardDeviation/v/9", "MethodofMomentsOverallStandardDeviation/v/0",
+                "MethodofomentsOverallStandardDeviation/v/1", "MethodofMomentsOverallStandardDeviation/v/2", "MethodofMomentsOverallStandardDeviation/v/3",
+                "MethodofMomentsOverallStandardDeviation/v/4", "SpectralCentroidOverallAverage",
+                "SpectralRolloffPointOverallAverage", "SpectralFluxOverallAverage", "CompactnessOverallAverage", "SpectralVariabilityOverallAverage",
+                "RootMeanSquareOverallAverage", "FractionOfLowEnergyWindowsOverallAverage", "ZeroCrossingsOverallAverage",
+                "StrongestBeatOverallAverage", "BeatSumOverallAverage", "StrengthOfStrongestBeatOverallAverage", "LPCOverallAverage/v/0",
+                "LPCOverallAverage/v/1", "LPCOverallAverage/v/2", "LPCOverallAverage/v/3", "LPCOverallAverage/v/4", "LPCOverallAverage/v/5",
+                "LPCOverallAverage/v/6", "LPCOverallAverage/v/7", "LPCOverallAverage/v/8", "LPCOverallAverage/v/9", "MethodofMomentsOverallAverage/v/0",
+                "MethodofMomentsOverallAverage/v/1", "MethodofMomentsOverallAverage/v/2", "MethodofMomentsOverallAverage/v/3",
+                "MethodofMomentsOverallAverage/v/4"
+        };
+
+//        {"SpectralCentroidOverallStandardDeviation", "SpectralRolloffPointOverallStandardDeviation",
+//                "SpectralFluxOverallStandardDeviation", "CompactnessOverallStandardDeviation", "SpectralVariabilityOverallStandardDeviation",
+//                "RootMeanSquareOverallStandardDeviation", "FractionOfLowEnergyWindowsOverallStandardDeviation", "ZeroCrossingsOverallStandardDeviation",
+//                "StrongestBeatOverallStandardDeviation", "BeatSumOverallStandardDeviation", "StrengthOfStrongestBeatOverallStandardDeviation", "LPCOverallStandardDeviation/v/0",
+//                "LPCOverallStandardDeviation/v/1", "LPCOverallStandardDeviation/v/2", "LPCOverallStandardDeviation/v/3", "LPCOverallStandardDeviation/v/4",
+//                "LPCOverallStandardDeviation/v/5", "LPCOverallStandardDeviation/v/6", "LPCOverallStandardDeviation/v/7", "LPCOverallStandardDeviation/v/8",
+//                "LPCOverallStandardDeviation/v/9", "MethodofMomentsOverallStandardDeviation/v/0", "MethodofMomentsOverallStandardDeviation/v/1",
+//                "MethodofMomentsOverallStandardDeviation/v/2", "MethodofMomentsOverallStandardDeviation/v/3", "MethodofMomentsOverallStandardDeviation/v/4",
+//                "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/0", "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/1",
+//                "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/2", "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/3",
+//                "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/4", "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/5", "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/6",
+//                "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/7", "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/8",
+//                "AreaMethodofMomentsofMFCCsOverallStandardDeviation/v/9", "SpectralCentroidOverallAverage", "SpectralRolloffPointOverallAverage",
+//                "SpectralFluxOverallAverage", "CompactnessOverallAverage", "SpectralVariabilityOverallAverage", "RootMeanSquareOverallAverage",
+//                "FractionOfLowEnergyWindowsOverallAverage", "ZeroCrossingsOverallAverage", "StrongestBeatOverallAverage", "BeatSumOverallAverage",
+//                "StrengthOfStrongestBeatOverallAverage", "LPCOverallAverage/v/0", "LPCOverallAverage/v/1", "LPCOverallAverage/v/2", "LPCOverallAverage/v/3",
+//                "LPCOverallAverage/v/4", "LPCOverallAverage/v/5", "LPCOverallAverage/v/6", "LPCOverallAverage/v/7", "LPCOverallAverage/v/8",
+//                "LPCOverallAverage/v/9", "MethodofMomentsOverallAverage/v/0", "MethodofMomentsOverallAverage/v/1", "MethodofMomentsOverallAverage/v/2",
+//                "MethodofMomentsOverallAverage/v/3", "MethodofMomentsOverallAverage/v/4", "AreaMethodofMomentsofMFCCsOverallAverage/v/0",
+//                "AreaMethodofMomentsofMFCCsOverallAverage/v/1", "AreaMethodofMomentsofMFCCsOverallAverage/v/2", "AreaMethodofMomentsofMFCCsOverallAverage/v/3",
+//                "AreaMethodofMomentsofMFCCsOverallAverage/v/4", "AreaMethodofMomentsofMFCCsOverallAverage/v/5", "AreaMethodofMomentsofMFCCsOverallAverage/v/6",
+//                "AreaMethodofMomentsofMFCCsOverallAverage/v/7", "AreaMethodofMomentsofMFCCsOverallAverage/v/8", "AreaMethodofMomentsofMFCCsOverallAverage/v/9"};
     }
 }

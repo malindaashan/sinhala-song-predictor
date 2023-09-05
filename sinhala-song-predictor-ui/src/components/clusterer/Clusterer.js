@@ -14,7 +14,7 @@ const Clusterer = () => {
 
     function executeClusterer() {
         setResult("Loading.....")
-        ClustererService.predictCluster(selectedAlgorithm,selectedFile)
+        ClustererService.predictCluster(selectedAlgorithm, selectedFile)
             .then((response) => {
                 if (response.success) {
                     setResult(response.data);
@@ -27,45 +27,45 @@ const Clusterer = () => {
             });
     }
 
-        return (
-            <Box id="clusterer" className="clusterer">
-                <h1> Clusterer</h1>
-                <br/><br/><br/>
-                <Grid container>
-                    <Grid item xs={12} sm={6} md={3}>
-                        <FormControl fullWidth sx={{paddingRight: '40px'}}>
-                            <InputLabel id="cluster-lbl">Choose Clusterer Algorithm</InputLabel>
-                            <Select
-                                labelId="cluster-lbl"
-                                id="cluster-select"
-                                label="Choose Clusterer Algorithm"
-                                value={selectedAlgorithm}
-                                onChange={handleClusterAlgoChange}
-                            >
-                                <MenuItem value="K-means">K-means</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
+    return (
+        <Box id="clusterer" className="clusterer">
+            <h1> Clusterer</h1>
+            <br/><br/><br/>
+            <Grid container>
+                <Grid item xs={12} sm={6} md={3}>
+                    <FormControl fullWidth sx={{paddingRight: '40px'}}>
+                        <InputLabel id="cluster-lbl">Choose Clusterer Algorithm</InputLabel>
+                        <Select
+                            labelId="cluster-lbl"
+                            id="cluster-select"
+                            label="Choose Clusterer Algorithm"
+                            value={selectedAlgorithm}
+                            onChange={handleClusterAlgoChange}
+                        >
+                            <MenuItem value="K-means">K-means</MenuItem>
+                        </Select>
+                    </FormControl>
                 </Grid>
-                <br/>
-                <Grid id={'song-uploader'} container justifyContent="center">
-                    <Grid item xs={12} sm={6} md={3}>
-                        <SongUploader
-                            setSelectedFile={setSelectedFile}
-                        />
-                    </Grid>
+            </Grid>
+            <br/>
+            <Grid id={'song-uploader'} container justifyContent="center">
+                <Grid item xs={12} sm={6} md={3}>
+                    <SongUploader
+                        setSelectedFile={setSelectedFile}
+                    />
                 </Grid>
-                <Grid container justifyContent="flex-end">
-                    <Button id="clusterer-button" size="medium" variant="contained" color='secondary'
-                            style={{marginTop: "20px"}} onClick={() => executeClusterer()}>SHOW CLUSTER</Button>
-                </Grid>
-                <Grid container justifyContent="center">
-                    <h1>Result is: {result}</h1>
+            </Grid>
+            <Grid container justifyContent="flex-end">
+                <Button id="clusterer-button" size="medium" variant="contained" color='secondary'
+                        style={{marginTop: "20px"}} onClick={() => executeClusterer()}>SHOW CLUSTER</Button>
+            </Grid>
+            <Grid container justifyContent="center">
+                <h1>Result is: {result}</h1>
 
-                </Grid>
-            </Box>
-        )
+            </Grid>
+        </Box>
+    )
 
-    }
+}
 
-    export default Clusterer;
+export default Clusterer;
