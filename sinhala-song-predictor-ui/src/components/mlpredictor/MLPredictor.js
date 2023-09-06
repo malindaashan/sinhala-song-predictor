@@ -17,7 +17,7 @@ const MLPredictor = () => {
         MLPredictorService.executeClassifier(selectedAlgorithm, selectedFile)
             .then((response) => {
                 if (response.success) {
-                    setResult(response.data);
+                    setResult(response.data ===0? "Calm":response.data ===1? "Happy":"Sad");
                 } else {
                     alert("Failed");
                 }

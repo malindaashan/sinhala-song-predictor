@@ -17,9 +17,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -108,6 +106,12 @@ public class CommonUtil {
         String fileDestPath = originalFileSavePath + File.separator + fileName;
         Files.copy(file.getInputStream(), Paths.get(fileDestPath), StandardCopyOption.REPLACE_EXISTING);
     }
+    public void saveMP3File(File file) throws Exception {
+        String fileName = file.getName().replaceAll("\\s", "");
+        String fileDestPath = originalFileSavePath + File.separator + fileName;
+        Files.copy(Paths.get(file.getAbsolutePath()), Paths.get(fileDestPath), StandardCopyOption.REPLACE_EXISTING);
+    }
+
 
     public void extractFeatures(String fileName) throws Exception {
         System.out.println("Started Extract Features......");
@@ -154,11 +158,6 @@ public class CommonUtil {
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(xmlFile);
 
-//        NodeList nodesFile = doc.getElementsByTagName("file");
-//        for (int i = 0; i < nodesFile.getLength(); i++) {
-//            Node n = nodesFile.item(i);
-//            doc.getElementsByTagName("file").item(i).removeChild(n);
-//        }
         doc.getElementsByTagName("file").item(0).getFirstChild().setNodeValue(file.getAbsolutePath());
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
@@ -167,7 +166,7 @@ public class CommonUtil {
         transformer.transform(source, streamResult);
 
         File dir = new File(jAudioJarPath + File.separator);
-        String cmd = "java -jar jAudio-1.0.4.jar -b bdone.xml";
+        String cmd = "java -jar jAudio-1.0.4.jar -b bdone";
         Process ps = Runtime.getRuntime().exec(cmd, null, dir);
         java.io.InputStream is = ps.getInputStream();
         System.out.println("Executing jAudio.jar.. Please wait");
@@ -282,5 +281,13 @@ public class CommonUtil {
 //                "AreaMethodofMomentsofMFCCsOverallAverage/v/1", "AreaMethodofMomentsofMFCCsOverallAverage/v/2", "AreaMethodofMomentsofMFCCsOverallAverage/v/3",
 //                "AreaMethodofMomentsofMFCCsOverallAverage/v/4", "AreaMethodofMomentsofMFCCsOverallAverage/v/5", "AreaMethodofMomentsofMFCCsOverallAverage/v/6",
 //                "AreaMethodofMomentsofMFCCsOverallAverage/v/7", "AreaMethodofMomentsofMFCCsOverallAverage/v/8", "AreaMethodofMomentsofMFCCsOverallAverage/v/9"};
+    }
+
+    public File convertMultipartFileToFile(MultipartFile multipartFile) throws IOException {
+        File file = new File("tempfile"); // You can change the file name and path as needed
+        try (OutputStream os = new FileOutputStream(file)) {
+            os.write(multipartFile.getBytes());
+        }
+        return file;
     }
 }

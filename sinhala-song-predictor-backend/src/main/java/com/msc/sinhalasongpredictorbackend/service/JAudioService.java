@@ -87,7 +87,7 @@ public class JAudioService {
             CSVWriter writer = new CSVWriter(outputfile);
             writer.writeNext(commonUtil.getCSVHeaders());
             for (File file : files.listFiles()) {
-                System.out.println("Processing "+file.getName());
+                System.out.println("Processing " + file.getName());
                 //extract features
                 commonUtil.extractFeatures(file);
                 //convert features to csv

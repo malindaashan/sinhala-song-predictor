@@ -1,6 +1,8 @@
 package com.msc.sinhalasongpredictorbackend.controller;
 
 import com.msc.sinhalasongpredictorbackend.modal.ApiResponse;
+import com.msc.sinhalasongpredictorbackend.modal.JAudioBulkRequest;
+import com.msc.sinhalasongpredictorbackend.modal.PredictionBulkRequest;
 import com.msc.sinhalasongpredictorbackend.service.ClassifyService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,15 @@ public class ClassificationController {
         } catch (Exception e) {
             e.printStackTrace();
             return new ApiResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/classify-ml-bulk")
+    public void classifyAndSaveBulk(@RequestBody PredictionBulkRequest predictionBulkRequest) {
+        try{
+            classifyService.classifyAndSaveBulk(predictionBulkRequest);
+        } catch(Exception e){
+            e.printStackTrace();
         }
     }
 }

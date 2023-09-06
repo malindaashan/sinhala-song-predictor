@@ -11,7 +11,7 @@ const SongUploader = ({setSelectedFile}) => {
     return (
         <Stack direction="row" alignItems="center" spacing={4}>
             <Button variant="contained" component="label" >
-                <input accept="audio/MP3" multiple type="file"  onChange={onFileUpload}/>
+                <input accept="*" multiple type="file"  onChange={onFileUpload}/>
             </Button>
         </Stack>
 
