@@ -9,10 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import weka.classifiers.Classifier;
-import weka.core.Attribute;
-import weka.core.Instance;
-import weka.core.Instances;
-import weka.core.SerializationHelper;
+import weka.classifiers.meta.Bagging;
+import weka.core.*;
 import weka.core.converters.CSVLoader;
 
 import java.io.File;
@@ -28,9 +26,19 @@ public class ClassifyService {
     @Value("${classify.randomforest.modal.location}")
     private String randomForestLocation;
 
+    @Value("${classify.naivebayes.modal.location}")
+    private String naiveBayesLocation;
+
+    @Value("${classify.smo.modal.location}")
+    private String smoLocation;
+
     @Value("${feature.csv.output}")
     private String csvFeatureOutput;
     private static final String RANDOM_FOREST = "Random-Forest";
+
+    private static final String NAIVE_BAYES = "Naive-Bayes";
+
+    private static final String SMO = "SMO";
     @Autowired
     CommonUtil commonUtil;
 
@@ -74,6 +82,10 @@ public class ClassifyService {
         commonUtil.createCsv(featureVectorFile);
         if (RANDOM_FOREST.equalsIgnoreCase(algorithm)) {
             return runRandomForest();
+        } else if (SMO.equals(algorithm)){
+            return runSMO();
+        } else if(NAIVE_BAYES.equals(algorithm)){
+            return  runNaiveBayes();
         }
         return -1;
     }
@@ -81,6 +93,42 @@ public class ClassifyService {
 
     private Integer runRandomForest() throws Exception {
         Classifier randomForest = (Classifier) SerializationHelper.read(randomForestLocation);
+        CSVLoader loader = new CSVLoader();
+        try (InputStream fis = new FileInputStream(csvFeatureOutput)) {
+            loader.setSource(fis);
+
+            Instances trainingDataSet = loader.getDataSet();
+
+            ArrayList labels = new ArrayList();
+            labels.add("0.0");
+            labels.add("1.0");
+            labels.add("2.0");
+            Attribute attributeCls = new Attribute("label",labels);
+
+            ArrayList<Attribute> attributeArrayList = new ArrayList<>();
+            for (int i = 0; i < trainingDataSet.numAttributes(); i++) {
+                Attribute attribute = trainingDataSet.attribute(i);
+                attributeArrayList.add(attribute);
+            }
+            attributeArrayList.add(attributeCls);
+            double[] arrayDouble = getInstances(trainingDataSet);
+            Instances dataset = new Instances("testdata", attributeArrayList, 0);
+
+            DenseInstance instance = new DenseInstance(1.0, arrayDouble);
+            instance.setDataset(dataset);
+            dataset.setClassIndex(dataset.numAttributes() - 1);
+
+            Double prediction = randomForest.classifyInstance(instance);
+            System.out.println(prediction);
+            return prediction.intValue();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+    private Integer runSMO() throws Exception {
+        Classifier randomForest = (Classifier) SerializationHelper.read(smoLocation);
         CSVLoader loader = new CSVLoader();
         try (InputStream fis = new FileInputStream(csvFeatureOutput)) {
             loader.setSource(fis);
@@ -102,6 +150,43 @@ public class ClassifyService {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
+    }
+
+    private Integer runNaiveBayes() throws Exception {
+        Classifier randomForest = (Classifier) SerializationHelper.read(naiveBayesLocation);
+        CSVLoader loader = new CSVLoader();
+        try (InputStream fis = new FileInputStream(csvFeatureOutput)) {
+            loader.setSource(fis);
+
+            Instances trainingDataSet = loader.getDataSet();
+
+            List values = new ArrayList();
+            values.add("1.0");
+            trainingDataSet.insertAttributeAt(new Attribute("label", values), trainingDataSet.numAttributes());
+            trainingDataSet.setClassIndex(trainingDataSet.numAttributes() - 1);
+
+            for (Instance i : trainingDataSet) {
+                Double result = randomForest.classifyInstance(i);
+                return result.intValue();
+            }
+
+            return -1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+    private double[] getInstances(Instances dataset) {
+        int n = dataset.numAttributes();
+        double [] v = new double[ n ];
+        for( int i = 0; i < dataset.size(); i++ ) {
+            Instance instance = dataset.get(i);
+            for( int j = 0; j < n; j++ ) {
+                v[ j ] = instance.value(j);
+            }
+            return v ;
+        }
+        return null;
     }
 
     public void classifyAndSaveBulk(PredictionBulkRequest predictionBulkRequest) {

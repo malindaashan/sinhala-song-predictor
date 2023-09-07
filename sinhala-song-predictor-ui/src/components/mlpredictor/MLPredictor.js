@@ -17,7 +17,8 @@ const MLPredictor = () => {
         MLPredictorService.executeClassifier(selectedAlgorithm, selectedFile)
             .then((response) => {
                 if (response.success) {
-                    setResult(response.data ===0? "Calm":response.data ===1? "Happy":"Sad");
+                    setResult(response.data === 0 ? "Calm" : response.data === 1 ? "Happy" :
+                        response.data === 2 ? "Sad" : "Error");
                 } else {
                     alert("Failed");
                 }
@@ -42,6 +43,8 @@ const MLPredictor = () => {
                             value={selectedAlgorithm}
                             onChange={handleClassifierAlgoChange}
                         >
+                            <MenuItem value="SMO">SMO</MenuItem>
+                            <MenuItem value="Naive-Bayes">Naive-Bayes</MenuItem>
                             <MenuItem value="Random-Forest">Random-Forest</MenuItem>
                         </Select>
                     </FormControl>
