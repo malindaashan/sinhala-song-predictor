@@ -9,7 +9,7 @@ const SongUploader = ({setSelectedFile}) => {
         setIsFilePicked(true);
     }
     return (
-        <Stack direction="row" alignItems="center" spacing={4}>
+        <Stack direction="row" justifyContent="center" spacing={4}>
             <Button variant="contained" component="label" >
                 <input accept="*" multiple type="file"  onChange={onFileUpload}/>
             </Button>

@@ -1,24 +1,23 @@
-import * as React from 'react';
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
+import React from "react";
+import {Modal} from "@mui/material";
 
-const Loader = ({downloadSuccessful,showDownloader}) => {
-    const style = {
-        position: 'absolute',
-        top: '50%',
-        left: '30%',
-        transform: 'translate(-50%, -50%)',
-        width: '10vh'
-    };
+const Loader = () => {
+    const [showDownloader, setShowDownloader] = React.useState(true);
     return (
         <Modal
             open={showDownloader}
         >
-            <Box sx={{...style}}>
-                <img src={process.env.PUBLIC_URL + '/downloading.gif'} width='700%' id="loader-img" alt="loader"/>
-            </Box>
+            <div id="loader" className="center-image" style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '70vh'
+
+            }}>
+                <img src={process.env.PUBLIC_URL + '/loader.gif'} id="loader-img" alt="loader"/>
+            </div>
         </Modal>
-    );
+    )
 }
 
-export default Loader
+export default Loader;
