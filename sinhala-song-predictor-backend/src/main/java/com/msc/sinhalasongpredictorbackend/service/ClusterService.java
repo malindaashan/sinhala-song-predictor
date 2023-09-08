@@ -1,6 +1,5 @@
 package com.msc.sinhalasongpredictorbackend.service;
 
-import com.msc.sinhalasongpredictorbackend.modal.FeatureVectorFile;
 import com.msc.sinhalasongpredictorbackend.modal.PredictionBulkRequest;
 import com.msc.sinhalasongpredictorbackend.modal.PredictionResponse;
 import com.msc.sinhalasongpredictorbackend.util.CommonUtil;
@@ -15,7 +14,6 @@ import weka.core.Instances;
 import weka.core.SerializationHelper;
 import weka.core.converters.CSVLoader;
 import weka.filters.Filter;
-import weka.filters.unsupervised.attribute.AddExpression;
 import weka.filters.unsupervised.attribute.Remove;
 
 import java.io.File;
@@ -24,8 +22,6 @@ import java.io.FileWriter;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class ClusterService {
@@ -33,9 +29,13 @@ public class ClusterService {
     @Value("${cluster.kmeans.modal.location}")
     private String kMeansModalLocation;
 
+    @Value("${cluster.hcluster.modal.location}")
+    private String hClusterLocation;
     @Value("${feature.csv.output}")
     private String csvFeatureOutput;
     private static final String K_MEANS = "K-Means";
+
+    private static final String H_CLUSTER = "Hierarchical-Clustering";
 
     private static final DecimalFormat df = new DecimalFormat("0.00");
 
@@ -47,47 +47,21 @@ public class ClusterService {
     CommonUtil commonUtil;
 
     public PredictionResponse predictCluster(MultipartFile multipartFile, String algorithm) throws Exception {
-        //save mp3 file
-        commonUtil.saveMP3File(multipartFile);
-
-
-        //trim and convert mp3 file wav
-        commonUtil.convertMP3Wav(multipartFile.getOriginalFilename());
-
-        //trim mp3
-        commonUtil.trimMP3(multipartFile.getOriginalFilename());
-
-        //extract features
-        commonUtil.extractFeatures(multipartFile.getOriginalFilename());
-
-        //convert features to csv
-       FeatureVectorFile featureVectorFile = commonUtil.readAudioFeatureXml();
-       commonUtil.createCsv(featureVectorFile);
+        commonUtil.preProcessAudio(multipartFile);
         if (K_MEANS.equalsIgnoreCase(algorithm)) {
             return runKMeans();
+        } else if (H_CLUSTER.equalsIgnoreCase(algorithm)) {
+            return runHCluster();
         }
         return new PredictionResponse();
     }
 
     public PredictionResponse predictCluster(File file, String algorithm) throws Exception {
-        //save mp3 file
-        commonUtil.saveMP3File(file);
-
-
-        //trim and convert mp3 file wav
-        commonUtil.convertMP3Wav(file.getName());
-
-        //trim mp3
-        commonUtil.trimMP3(file.getName());
-
-        //extract features
-        commonUtil.extractFeatures(file.getName());
-
-        //convert features to csv
-        FeatureVectorFile featureVectorFile = commonUtil.readAudioFeatureXml();
-        commonUtil.createCsv(featureVectorFile);
+        commonUtil.preProcessAudio(file);
         if (K_MEANS.equalsIgnoreCase(algorithm)) {
             return runKMeans();
+        } else if (H_CLUSTER.equalsIgnoreCase(algorithm)) {
+            return runHCluster();
         }
         return new PredictionResponse();
     }
@@ -100,14 +74,37 @@ public class ClusterService {
             loader.setSource(fis);
 
             Instances trainingDataSet = loader.getDataSet();
-            Instances selectedDataset= getInstancesWithSpecificHeaders(trainingDataSet);
+            Instances selectedDataset = getInstancesWithSpecificHeaders(trainingDataSet);
 
             for (Instance i : selectedDataset) {
                 int result = clusterer.clusterInstance(i);
                 PredictionResponse predictionResponse = new PredictionResponse();
                 predictionResponse.setPredictedValue(result);
-//                double[] doubleDistributionArray = clusterer.distributionForInstance(i);
-//                predictionResponse.setPredictedDistribution(getDistributionMap(doubleDistributionArray));
+                return predictionResponse;
+            }
+
+            return new PredictionResponse();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+
+    }
+
+    private PredictionResponse runHCluster() throws Exception {
+        Clusterer clusterer = (Clusterer) SerializationHelper.read(hClusterLocation);
+        CSVLoader loader = new CSVLoader();
+        try (InputStream fis = new FileInputStream(csvFeatureOutput)) {
+
+            loader.setSource(fis);
+
+            Instances trainingDataSet = loader.getDataSet();
+            Instances selectedDataset = getInstancesWithSpecificHeaders(trainingDataSet);
+
+            for (Instance i : selectedDataset) {
+                int result = clusterer.clusterInstance(i);
+                PredictionResponse predictionResponse = new PredictionResponse();
+                predictionResponse.setPredictedValue(result);
                 return predictionResponse;
             }
 
@@ -140,20 +137,21 @@ public class ClusterService {
         }
     }
 
-    public static String getPredictedClusterString(Integer predictedValue){
-        if(predictedValue ==1){
+    public static String getPredictedClusterString(Integer predictedValue) {
+        if (predictedValue == 1) {
             return SAD;
-        } else if(predictedValue ==2){
+        } else if (predictedValue == 2) {
             return HAPPY;
-        } else if (predictedValue ==0){
+        } else if (predictedValue == 0) {
             return CALM;
         } else {
             return "ERROR";
         }
     }
+
     public Instances getInstancesWithSpecificHeaders(Instances instances) throws Exception {
 
-        int[] indicesToKeep = {6,14,19,21,26,28,29,34,38,47};
+        int[] indicesToKeep = {6, 14, 19, 21, 26, 28, 29, 34, 38, 47};
 
         Remove removeFilter = new Remove();
         removeFilter.setAttributeIndicesArray(indicesToKeep);

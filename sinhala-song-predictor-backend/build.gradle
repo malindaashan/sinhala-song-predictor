@@ -16,7 +16,13 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.postgresql:postgresql'
+
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	runtimeOnly 'com.zaxxer:HikariCP'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
 	implementation group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.3.3'
@@ -24,6 +30,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok:1.18.22'
 	implementation group: 'com.opencsv', name: 'opencsv', version: '5.7.1'
 	implementation group: 'nz.ac.waikato.cms.weka', name: 'weka-stable', version: '3.8.6'
+
 
 
 

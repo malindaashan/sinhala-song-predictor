@@ -57,6 +57,41 @@ public class CommonUtil {
     private static final String CALM = "Calm";
 
 
+    public void preProcessAudio(File file) throws Exception {
+        saveMP3File(file);
+
+        //trim and convert mp3 file wav
+        convertMP3Wav(file.getName());
+
+        //trim mp3
+        trimMP3(file.getName());
+
+        //extract features
+        extractFeatures(file.getName());
+
+        //convert features to csv
+        FeatureVectorFile featureVectorFile = readAudioFeatureXml();
+        createCsv(featureVectorFile);
+
+    }
+
+    public void preProcessAudio(MultipartFile multipartFile) throws Exception {
+        saveMP3File(multipartFile);
+
+        //trim and convert mp3 file wav
+        convertMP3Wav(multipartFile.getOriginalFilename());
+
+        //trim mp3
+        trimMP3(multipartFile.getOriginalFilename());
+
+        //extract features
+        extractFeatures(multipartFile.getOriginalFilename());
+
+        //convert features to csv
+        FeatureVectorFile featureVectorFile = readAudioFeatureXml();
+        createCsv(featureVectorFile);
+    }
+
     public void trimMP3(String fileName) throws Exception {
         //ffmpeg -ss 00:00:00.000 -i "output3.wav" -t 90 -map 0 -c copy "output31.wav"
         String inputPath = convertedFileSavePath + File.separator + fileName.replaceAll("\\s", "").replace(".mp3", ".wav");
@@ -111,6 +146,7 @@ public class CommonUtil {
         String fileDestPath = originalFileSavePath + File.separator + fileName;
         Files.copy(file.getInputStream(), Paths.get(fileDestPath), StandardCopyOption.REPLACE_EXISTING);
     }
+
     public void saveMP3File(File file) throws Exception {
         String fileName = file.getName().replaceAll("\\s", "");
         String fileDestPath = originalFileSavePath + File.separator + fileName;
@@ -196,6 +232,7 @@ public class CommonUtil {
         System.out.println("===============================");
         return featureVectorFile;
     }
+
     public FeatureVectorFile readAudioFeatureXml(String path) throws JAXBException, IOException {
         File xmlFile = new File(String.valueOf(Path.of(path)));
 
@@ -242,7 +279,7 @@ public class CommonUtil {
 //        writer.close();
     }
 
-    public String[] getCSVHeaders(){
+    public String[] getCSVHeaders() {
         return new String[]{"SpectralCentroidOverallStandardDeviation", "SpectralRolloffPointOverallStandardDeviation",
                 "SpectralFluxOverallStandardDeviation", "CompactnessOverallStandardDeviation",
                 "SpectralVariabilityOverallStandardDeviation",
@@ -296,12 +333,12 @@ public class CommonUtil {
         return file;
     }
 
-    public static String getPredictedString(Integer predictedValue){
-        if(predictedValue ==0){
+    public static String getPredictedString(Integer predictedValue) {
+        if (predictedValue == 0) {
             return CALM;
-        } else if(predictedValue ==1){
+        } else if (predictedValue == 1) {
             return HAPPY;
-        } else if (predictedValue ==2){
+        } else if (predictedValue == 2) {
             return SAD;
         } else {
             return "ERROR";

@@ -1,6 +1,5 @@
 package com.msc.sinhalasongpredictorbackend.service;
 
-import com.msc.sinhalasongpredictorbackend.modal.FeatureVectorFile;
 import com.msc.sinhalasongpredictorbackend.modal.PredictionBulkRequest;
 import com.msc.sinhalasongpredictorbackend.modal.PredictionResponse;
 import com.msc.sinhalasongpredictorbackend.util.CommonUtil;
@@ -49,21 +48,7 @@ public class ClassifyService {
     CommonUtil commonUtil;
 
     public PredictionResponse classifyMusic(MultipartFile multipartFile, String algorithm) throws Exception {
-        commonUtil.saveMP3File(multipartFile);
-
-
-        //trim and convert mp3 file wav
-        commonUtil.convertMP3Wav(multipartFile.getOriginalFilename());
-
-        //trim mp3
-        commonUtil.trimMP3(multipartFile.getOriginalFilename());
-
-        //extract features
-        commonUtil.extractFeatures(multipartFile.getOriginalFilename());
-
-        //convert features to csv
-        FeatureVectorFile featureVectorFile = commonUtil.readAudioFeatureXml();
-        commonUtil.createCsv(featureVectorFile);
+        commonUtil.preProcessAudio(multipartFile);
         if (RANDOM_FOREST.equalsIgnoreCase(algorithm)) {
             return runRandomForest();
         } else if (SMO_.equals(algorithm)) {
@@ -75,21 +60,7 @@ public class ClassifyService {
     }
 
     public PredictionResponse classifyMusic(File file, String algorithm) throws Exception {
-        commonUtil.saveMP3File(file);
-
-
-        //trim and convert mp3 file wav
-        commonUtil.convertMP3Wav(file.getName());
-
-        //trim mp3
-        commonUtil.trimMP3(file.getName());
-
-        //extract features
-        commonUtil.extractFeatures(file.getName());
-
-        //convert features to csv
-        FeatureVectorFile featureVectorFile = commonUtil.readAudioFeatureXml();
-        commonUtil.createCsv(featureVectorFile);
+        commonUtil.preProcessAudio(file);
         if (RANDOM_FOREST.equalsIgnoreCase(algorithm)) {
             return runRandomForest();
         } else if (SMO_.equals(algorithm)) {
@@ -108,7 +79,7 @@ public class ClassifyService {
             loader.setSource(fis);
 
             Instances trainingDataSet = loader.getDataSet();
-            trainingDataSet= getInstancesWithSpecificHeaders(trainingDataSet);
+            trainingDataSet = getInstancesWithSpecificHeaders(trainingDataSet);
             ArrayList labels = new ArrayList();
             labels.add("0.0");
             labels.add("1.0");
@@ -153,7 +124,7 @@ public class ClassifyService {
             loader.setSource(fis);
 
             Instances trainingDataSet = loader.getDataSet();
-            trainingDataSet= getInstancesWithSpecificHeaders(trainingDataSet);
+            trainingDataSet = getInstancesWithSpecificHeaders(trainingDataSet);
             List values = new ArrayList();
             values.add("1.0");
             trainingDataSet.insertAttributeAt(new Attribute("label", values), trainingDataSet.numAttributes());
@@ -183,7 +154,7 @@ public class ClassifyService {
             loader.setSource(fis);
 
             Instances trainingDataSet = loader.getDataSet();
-            trainingDataSet= getInstancesWithSpecificHeaders(trainingDataSet);
+            trainingDataSet = getInstancesWithSpecificHeaders(trainingDataSet);
             List values = new ArrayList();
             values.add("1.0");
             trainingDataSet.insertAttributeAt(new Attribute("label", values), trainingDataSet.numAttributes());
@@ -230,7 +201,7 @@ public class ClassifyService {
 
     public Instances getInstancesWithSpecificHeaders(Instances instances) throws Exception {
 
-        int[] indicesToKeep = {6,14,19,21,26,28,29,34,38,47};
+        int[] indicesToKeep = {6, 14, 19, 21, 26, 28, 29, 34, 38, 47};
 
         Remove removeFilter = new Remove();
         removeFilter.setAttributeIndicesArray(indicesToKeep);
