@@ -51,6 +51,8 @@ const Clusterer = () => {
                                 onChange={handleClusterAlgoChange}
                             >
                                 <MenuItem value="K-means">K-means</MenuItem>
+                                <MenuItem value="Hierarchical-Clustering">Hierarchical-Clustering</MenuItem>
+
                             </Select>
                         </FormControl>
                     </Grid>

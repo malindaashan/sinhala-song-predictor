@@ -38,7 +38,7 @@ const MLPredictor = () => {
         <>
             {loading ? <Loader/> : null}
             <Box id="ml-predictor" className="ml-box">
-                <h1 justifyContent="center"> Classifier</h1>
+                <h1 justifyContent="center"> ML-Classifier</h1>
                 <br/><br/><br/>
                 <Grid container>
                     <Grid item xs={12} sm={6} md={3}>
