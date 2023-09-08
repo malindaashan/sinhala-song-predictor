@@ -55,8 +55,8 @@ const DataSetCreator = () => {
 
                 <FormGroup>
                     <FormControlLabel control={<Checkbox name={"SMO"} onClick={(e) => handleChange(e)}/>} label="SMO" />
-                    <FormControlLabel control={<Checkbox  name={"Naive Bayes"} onClick={(e) => handleChange(e)}/>} label="NAIVE BAYES" />
-                    <FormControlLabel control={<Checkbox name={"Random Forest"} onClick={(e) => handleChange(e)}/>} label="RANDOM FOREST" />
+                    <FormControlLabel control={<Checkbox  name={"Naive-Bayes"} onClick={(e) => handleChange(e)}/>} label="NAIVE BAYES" />
+                    <FormControlLabel control={<Checkbox name={"Random-Forest"} onClick={(e) => handleChange(e)}/>} label="RANDOM FOREST" />
 
                     <FormControlLabel control={<Checkbox name={"K-Means"} onClick={(e) => handleChange(e)}/>} label="K MEANS" />
                     <FormControlLabel control={<Checkbox name={"Hierarchical-Clustering"} onClick={(e) => handleChange(e)}/>} label="HIERARCHICAL CLUSTERING" />
