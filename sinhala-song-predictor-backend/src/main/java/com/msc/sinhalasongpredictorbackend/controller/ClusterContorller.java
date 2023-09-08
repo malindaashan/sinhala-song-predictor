@@ -1,15 +1,14 @@
 package com.msc.sinhalasongpredictorbackend.controller;
 
 import com.msc.sinhalasongpredictorbackend.modal.ApiResponse;
+import com.msc.sinhalasongpredictorbackend.modal.JAudioBulkRequest;
+import com.msc.sinhalasongpredictorbackend.modal.PredictionBulkRequest;
 import com.msc.sinhalasongpredictorbackend.service.ClusterService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -28,6 +27,14 @@ public class ClusterContorller {
             e.printStackTrace();
             return new ApiResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
 
+    @PostMapping("/predict-cluster-bulk")
+    public void clusterAndSaveBulk(@RequestBody PredictionBulkRequest predictionBulkRequest) {
+        try{
+            clusterService.clusterAndSaveBulk(predictionBulkRequest);
+        } catch(Exception e){
+            e.printStackTrace();
+        }
     }
 }

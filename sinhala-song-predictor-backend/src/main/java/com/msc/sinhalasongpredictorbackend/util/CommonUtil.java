@@ -52,6 +52,11 @@ public class CommonUtil {
     @Value("${feature.csv.output}")
     private String csvFeatureOutput;
 
+    private static final String SAD = "Sad";
+    private static final String HAPPY = "Happy";
+    private static final String CALM = "Calm";
+
+
     public void trimMP3(String fileName) throws Exception {
         //ffmpeg -ss 00:00:00.000 -i "output3.wav" -t 90 -map 0 -c copy "output31.wav"
         String inputPath = convertedFileSavePath + File.separator + fileName.replaceAll("\\s", "").replace(".mp3", ".wav");
@@ -289,5 +294,17 @@ public class CommonUtil {
             os.write(multipartFile.getBytes());
         }
         return file;
+    }
+
+    public static String getPredictedString(Integer predictedValue){
+        if(predictedValue ==0){
+            return CALM;
+        } else if(predictedValue ==1){
+            return HAPPY;
+        } else if (predictedValue ==2){
+            return SAD;
+        } else {
+            return "ERROR";
+        }
     }
 }
