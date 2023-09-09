@@ -3,7 +3,6 @@ import {BASE_URL} from "../common/Settings";
 
 class DataSetCreatorService {
     saveAndExtractFeatures = async (algorithm, file) => {
-        console.log(algorithm);
         const formData = new FormData();
         formData.append("file", file);
         formData.append("algorithm", JSON.stringify(algorithm));
@@ -16,6 +15,18 @@ class DataSetCreatorService {
             });
         return response;
     }
+    getAllPaginatedSavedData = async (page, size) => {
+        const {data: response} =
+            await axios.get(BASE_URL + '/dataset-creator/find-by-paginated?page=' + page + '&size=' + size);
+        return response;
+    }
+
+    getTotalRowCount = async () => {
+        const {data: response} =
+            await axios.get(BASE_URL + '/dataset-creator/count');
+        return response;
+    }
+
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export

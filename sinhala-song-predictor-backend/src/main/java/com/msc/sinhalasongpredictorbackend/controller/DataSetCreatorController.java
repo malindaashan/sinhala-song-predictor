@@ -6,12 +6,10 @@ import com.msc.sinhalasongpredictorbackend.modal.DataSetCreatorRequest;
 import com.msc.sinhalasongpredictorbackend.service.DataSetCreatorService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
@@ -38,5 +36,26 @@ public class DataSetCreatorController {
             e.printStackTrace();
             return new ApiResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/find-by-paginated")
+    public ApiResponse getFeatureDataPaginated(@RequestParam("size") Integer size, @RequestParam("page") Integer page){
+        try {
+            return new ApiResponse(dataSetCreatorService.getPredictionPaginatedData(size, page));
+        } catch (Exception e){
+            e.printStackTrace();
+            return new ApiResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/count")
+    public ApiResponse getDataCount() {
+        try{
+            return new ApiResponse(dataSetCreatorService.getPredictionDataCount());
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ApiResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 }
