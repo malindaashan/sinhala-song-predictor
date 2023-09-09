@@ -17,7 +17,7 @@ const DataSetCreator = () => {
 
     useEffect(() => {
         loadRowCount();
-        loadSavedDate();
+        loadSavedDate(page, pageSize);
     }, []);
 
     function loadRowCount() {
@@ -34,7 +34,7 @@ const DataSetCreator = () => {
             });
     }
 
-    function loadSavedDate() {
+    function loadSavedDate(page, pageSize) {
         setLoading(true);
         DataSetCreatorService.getAllPaginatedSavedData(page, pageSize)
             .then((response) => {
@@ -78,6 +78,12 @@ const DataSetCreator = () => {
             });
     }
 
+    const handlePageChange = (paginatedModel) => {
+        console.log(paginatedModel.page);
+        loadSavedDate(paginatedModel.page, paginatedModel.pageSize);
+        setPage(paginatedModel.page);
+
+    };
     return (
         <>
             <Box>
@@ -126,7 +132,9 @@ const DataSetCreator = () => {
                             activeData={activeData}
                             totCount={totCount}
                             pageSize={pageSize}
-                            setPageSize={setPageSize}/> : null}
+                            setPageSize={setPageSize}
+                            handlePageChange={handlePageChange}
+                            page={page}/> : null}
                 </Grid>
             </Box>
         </>

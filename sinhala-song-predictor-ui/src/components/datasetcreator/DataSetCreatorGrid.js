@@ -13,7 +13,7 @@ const columns = [
     {field: 'randomForest', headerName: 'Random Forest', flex: 1, headerClassName: 'data-grid-header'}
 ];
 
-export default function DataSetCreatorGrid({activeData, totCount,pageSize,setPageSize}) {
+export default function DataSetCreatorGrid({activeData, totCount,pageSize,setPageSize,handlePageChange, page}) {
 
     return (
         <>
@@ -26,9 +26,12 @@ export default function DataSetCreatorGrid({activeData, totCount,pageSize,setPag
                                   autoHeight {...activeData}
                                   onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                                   pageSizeOptions={[5, 10, 25]}
+                                  rowCount={totCount}
+                                  paginationMode="server"
+                                  onPaginationModelChange={handlePageChange}
                                   initialState={{
                                       ...activeData.initialState,
-                                      pagination: {paginationModel: {pageSize: 5}},
+                                      pagination: {paginationModel: {pageSize:pageSize, page: page}},
                                   }} />
                     </div>
                 </div>
