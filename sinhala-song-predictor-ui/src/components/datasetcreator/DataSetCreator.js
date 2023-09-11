@@ -20,7 +20,6 @@ const DataSetCreator = () => {
         loadSavedDate(page, pageSize);
     }, []);
 
-    
     function loadRowCount() {
         DataSetCreatorService.getTotalRowCount()
             .then((response) => {
