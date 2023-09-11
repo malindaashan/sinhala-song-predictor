@@ -36,7 +36,6 @@ chmod 777 /opt/research/app/sinhala-song-predictor.jar
 
 cd /opt/research/app/
 
-
 nohup java -jar sinhala-song-predictor.jar > log.log 2>&1 &
 
 echo "Deployment completed"
