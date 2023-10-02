@@ -33,7 +33,7 @@ const HomeDrawer = () => {
                     <Toolbar>
                         <Typography variant="h6" component="div"
                                     sx={{flexGrow: 1, alignItems: 'left', paddingLeft: "230px"}}>
-                            SINHALA MUSIC PREDICTOR - DL
+                            SINHALA MUSIC PREDICTOR
                         </Typography>
                     </Toolbar>
                 </AppBar>
