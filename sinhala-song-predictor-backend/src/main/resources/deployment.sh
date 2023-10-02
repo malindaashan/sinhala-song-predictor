@@ -28,7 +28,7 @@ cd sinhala-song-predictor-backend/
 
 gradle assemble
 
-rm /opt/research/app/sinhala-song-predictor.jar
+rm -rf /opt/research/app/sinhala-song-predictor.jar
 
 cp build/libs/sinhala-song-predictor-backend-0.0.1-SNAPSHOT.jar /opt/research/app/sinhala-song-predictor.jar
 
@@ -36,7 +36,6 @@ chmod 777 /opt/research/app/sinhala-song-predictor.jar
 
 cd /opt/research/app/
 
-nohup java -jar sinhala-song-predictor.jar > log.log 2>&1 &
+nohup java -jar -Dspring.profiles.active=prod sinhala-song-predictor.jar &
 
 echo "Deployment completed"
-} | tee -a /app-script-log.log

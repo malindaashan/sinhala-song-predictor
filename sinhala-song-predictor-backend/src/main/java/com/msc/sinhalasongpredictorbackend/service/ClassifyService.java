@@ -4,6 +4,7 @@ import com.msc.sinhalasongpredictorbackend.modal.PredictionBulkRequest;
 import com.msc.sinhalasongpredictorbackend.modal.PredictionResponse;
 import com.msc.sinhalasongpredictorbackend.util.CommonUtil;
 import com.opencsv.CSVWriter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import java.text.DecimalFormat;
 import java.util.*;
 
 @Service
+@Slf4j
 public class ClassifyService {
 
     @Value("${classify.randomforest.modal.location}")
@@ -107,12 +109,13 @@ public class ClassifyService {
             predictionResponse.setPredictedValue(result.intValue());
             predictionResponse.setPredictedDistribution(getDistributionMap(prediction));
 
-            System.out.println(result);
-            System.out.println(Arrays.toString(prediction));
+            log.info("result:{}",result);
+            log.info(Arrays.toString(prediction));
             return predictionResponse;
 
         } catch (Exception e) {
             e.printStackTrace();
+            log.error("runRandomForest execution error:{}",e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -136,12 +139,13 @@ public class ClassifyService {
                 predictionResponse.setPredictedValue(result.intValue());
                 predictionResponse.setPredictedDistribution(getDistributionMap(prediction));
 
-                System.out.println(result);
-                System.out.println(Arrays.toString(prediction));
+                log.info("SMO Result:{}",result);
+                log.info(Arrays.toString(prediction));
                 return predictionResponse;
             }
         } catch (Exception e) {
             e.printStackTrace();
+            log.error("runSMO execution error;{}",e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
         return new PredictionResponse();
@@ -167,8 +171,8 @@ public class ClassifyService {
                 predictionResponse.setPredictedValue(result.intValue());
                 predictionResponse.setPredictedDistribution(getDistributionMap(prediction));
 
-                System.out.println(result);
-                System.out.println(Arrays.toString(prediction));
+                log.info("Naive Bayes Result is:{}",result);
+                log.info(Arrays.toString(prediction));
                 return predictionResponse;
             }
         } catch (Exception e) {
@@ -228,7 +232,7 @@ public class ClassifyService {
             }
             writer.close();
         } catch (Exception e) {
-            System.out.println("Error Occurred while executing extractJAudioFeaturesFromBulkAudioPath");
+           log.error("Error Occurred while executing extractJAudioFeaturesFromBulkAudioPath");
             e.printStackTrace();
         }
 

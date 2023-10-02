@@ -5,6 +5,7 @@ import com.msc.sinhalasongpredictorbackend.modal.JAudioBulkRequest;
 import com.msc.sinhalasongpredictorbackend.modal.PredictionBulkRequest;
 import com.msc.sinhalasongpredictorbackend.service.ClassifyService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/classify")
+@Slf4j
 public class ClassificationController {
 
     @Autowired

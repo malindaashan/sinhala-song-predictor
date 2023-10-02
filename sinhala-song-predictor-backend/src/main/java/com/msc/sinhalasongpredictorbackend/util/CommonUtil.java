@@ -3,6 +3,7 @@ package com.msc.sinhalasongpredictorbackend.util;
 import com.msc.sinhalasongpredictorbackend.modal.Feature;
 import com.msc.sinhalasongpredictorbackend.modal.FeatureVectorFile;
 import com.opencsv.CSVWriter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 
 
 @Component
+@Slf4j
 public class CommonUtil {
 
     @Value("${file.original.save.location}")
@@ -99,18 +101,18 @@ public class CommonUtil {
         ;
         String cmd1 = "ffmpeg -ss 00:00:00.000 -y -i " + inputPath + " -t 90 -map 0 -c copy " + outputPath;
         Process ps1 = Runtime.getRuntime().exec(cmd1);
-        System.out.println(cmd1);
+        log.info(cmd1);
         int exitCode1 = ps1.waitFor();
         java.io.InputStream is1 = ps1.getInputStream();
         if (exitCode1 == 0) {
-            System.out.println("File trim successfully");
+            log.info("File trim successfully");
         } else {
-            System.out.println("Error Occurred while trim mp3 file. Exit code: " + exitCode1);
+            log.error("Error Occurred while trim mp3 file. Exit code: " + exitCode1);
         }
         byte b1[] = new byte[is1.available()];
         is1.read(b1, 0, b1.length);
-        System.out.println("log ffmpeg trim conversion");
-        System.out.println(new String(b1));
+        log.info("log ffmpeg trim conversion");
+        log.info(new String(b1));
 
         //copy final output to specific folder
         String finalOut = outputFileSavePath + File.separator + fileName.replaceAll("\\s", "").replace(".mp3", ".wav");
@@ -127,18 +129,18 @@ public class CommonUtil {
         ;
         String cmd1 = "ffmpeg -y -i " + inputPath + " -acodec pcm_s16le -ac 2 -ar 48000 " + outputPath;
         Process ps1 = Runtime.getRuntime().exec(cmd1);
-        System.out.println(cmd1);
+        log.info(cmd1);
         int exitCode1 = ps1.waitFor();
         java.io.InputStream is1 = ps1.getInputStream();
         if (exitCode1 == 0) {
-            System.out.println("File converted successfully");
+            log.info("File converted successfully");
         } else {
-            System.out.println("Error Occurred while converting mp3 file. Exit code: " + exitCode1);
+            log.error("Error Occurred while converting mp3 file. Exit code: " + exitCode1);
         }
         byte b1[] = new byte[is1.available()];
         is1.read(b1, 0, b1.length);
-        System.out.println("log ffmpeg wav conversion");
-        System.out.println(new String(b1));
+        log.info("log ffmpeg wav conversion");
+        log.info(new String(b1));
     }
 
     public void saveMP3File(MultipartFile file) throws Exception {
@@ -155,7 +157,7 @@ public class CommonUtil {
 
 
     public void extractFeatures(String fileName) throws Exception {
-        System.out.println("Started Extract Features......");
+        log.info("Started Extract Features......");
         String fileDestPath = outputFileSavePath + File.separator + fileName.replaceAll("\\s", "").replace(".mp3", ".wav");
         File xmlFile = new File(jAudioSampleBatchXml);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -178,21 +180,21 @@ public class CommonUtil {
         String cmd = "java -jar jAudio-1.0.4.jar -b bdone";
         Process ps = Runtime.getRuntime().exec(cmd, null, dir);
         java.io.InputStream is = ps.getInputStream();
-        System.out.println("Executing jAudio.jar.. Please wait");
+        log.info("Executing jAudio.jar.. Please wait");
         int exitCode = ps.waitFor();
         if (exitCode == 0) {
-            System.out.println("JAR file executed successfully.");
+            log.info("JAR file executed successfully.");
         } else {
-            System.out.println("Error executing JAR file. Exit code: " + exitCode);
+            log.error("Error executing JAR file. Exit code: " + exitCode);
         }
         byte b[] = new byte[is.available()];
         is.read(b, 0, b.length);
-        System.out.println("log out from jAudio");
-        System.out.println(new String(b));
+        log.info("log out from jAudio");
+        log.info(new String(b));
     }
 
     public void extractFeatures(File file) throws Exception {
-        System.out.println("Started Extract Features......");
+        log.info("Started Extract Features......");
         //String fileDestPath = outputFileSavePath + File.separator + fileName.replaceAll("\\s", "").replace(".mp3", ".wav");
         File xmlFile = new File(jAudioSampleBatchXml);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -210,17 +212,17 @@ public class CommonUtil {
         String cmd = "java -jar jAudio-1.0.4.jar -b bdone";
         Process ps = Runtime.getRuntime().exec(cmd, null, dir);
         java.io.InputStream is = ps.getInputStream();
-        System.out.println("Executing jAudio.jar.. Please wait");
+        log.info("Executing jAudio.jar.. Please wait");
         int exitCode = ps.waitFor();
         if (exitCode == 0) {
-            System.out.println("JAR file executed successfully.");
+            log.info("JAR file executed successfully.");
         } else {
-            System.out.println("Error executing JAR file. Exit code: " + exitCode);
+            log.info("Error executing JAR file. Exit code: " + exitCode);
         }
         byte b[] = new byte[is.available()];
         is.read(b, 0, b.length);
-        System.out.println("log out from jAudio");
-        System.out.println(new String(b));
+        log.info("log out from jAudio");
+        log.info(new String(b));
     }
 
     public FeatureVectorFile readAudioFeatureXml() throws JAXBException, IOException {
@@ -229,7 +231,7 @@ public class CommonUtil {
         JAXBContext jaxbContext = JAXBContext.newInstance(FeatureVectorFile.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         FeatureVectorFile featureVectorFile = (FeatureVectorFile) jaxbUnmarshaller.unmarshal(xmlFile);
-        System.out.println("===============================");
+        log.info("===============================");
         return featureVectorFile;
     }
 
@@ -239,7 +241,7 @@ public class CommonUtil {
         JAXBContext jaxbContext = JAXBContext.newInstance(FeatureVectorFile.class);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         FeatureVectorFile featureVectorFile = (FeatureVectorFile) jaxbUnmarshaller.unmarshal(xmlFile);
-        System.out.println("===============================");
+        log.info("===============================");
         return featureVectorFile;
     }
 
@@ -301,7 +303,7 @@ public class CommonUtil {
                 "MethodofMomentsOverallAverage/v/4"
         };
 
-//        {"SpectralCentroidOverallStandardDeviation", "SpectralRolloffPointOverallStandardDeviation",
+//        return new String[] {"SpectralCentroidOverallStandardDeviation", "SpectralRolloffPointOverallStandardDeviation",
 //                "SpectralFluxOverallStandardDeviation", "CompactnessOverallStandardDeviation", "SpectralVariabilityOverallStandardDeviation",
 //                "RootMeanSquareOverallStandardDeviation", "FractionOfLowEnergyWindowsOverallStandardDeviation", "ZeroCrossingsOverallStandardDeviation",
 //                "StrongestBeatOverallStandardDeviation", "BeatSumOverallStandardDeviation", "StrengthOfStrongestBeatOverallStandardDeviation", "LPCOverallStandardDeviation/v/0",
@@ -323,6 +325,7 @@ public class CommonUtil {
 //                "AreaMethodofMomentsofMFCCsOverallAverage/v/1", "AreaMethodofMomentsofMFCCsOverallAverage/v/2", "AreaMethodofMomentsofMFCCsOverallAverage/v/3",
 //                "AreaMethodofMomentsofMFCCsOverallAverage/v/4", "AreaMethodofMomentsofMFCCsOverallAverage/v/5", "AreaMethodofMomentsofMFCCsOverallAverage/v/6",
 //                "AreaMethodofMomentsofMFCCsOverallAverage/v/7", "AreaMethodofMomentsofMFCCsOverallAverage/v/8", "AreaMethodofMomentsofMFCCsOverallAverage/v/9"};
+
     }
 
     public File convertMultipartFileToFile(MultipartFile multipartFile) throws IOException {

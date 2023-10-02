@@ -4,6 +4,7 @@ import com.msc.sinhalasongpredictorbackend.modal.PredictionBulkRequest;
 import com.msc.sinhalasongpredictorbackend.modal.PredictionResponse;
 import com.msc.sinhalasongpredictorbackend.util.CommonUtil;
 import com.opencsv.CSVWriter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 
 @Service
+@Slf4j
 public class ClusterService {
 
     @Value("${cluster.kmeans.modal.location}")
@@ -86,6 +88,7 @@ public class ClusterService {
             return new PredictionResponse();
         } catch (Exception e) {
             e.printStackTrace();
+            log.error("run KMeans Error:{}",e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
 

@@ -4,6 +4,7 @@ import com.msc.sinhalasongpredictorbackend.modal.Feature;
 import com.msc.sinhalasongpredictorbackend.modal.FeatureVectorFile;
 import com.msc.sinhalasongpredictorbackend.util.CommonUtil;
 import com.opencsv.CSVWriter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 @Service
+@Slf4j
 public class JAudioService {
 
     @Autowired
@@ -43,7 +45,8 @@ public class JAudioService {
 
     private void createMergedCsv(FeatureVectorFile featureVectorFile, int index, CSVWriter writer) throws IOException {
         if (index == 0) {
-            String[] header = {"SpectralCentroidOverallStandardDeviation", "SpectralRolloffPointOverallStandardDeviation",
+            String[] header = commonUtil.getCSVHeaders();
+            /*{"SpectralCentroidOverallStandardDeviation", "SpectralRolloffPointOverallStandardDeviation",
                     "SpectralFluxOverallStandardDeviation", "CompactnessOverallStandardDeviation", "SpectralVariabilityOverallStandardDeviation",
                     "RootMeanSquareOverallStandardDeviation", "FractionOfLowEnergyWindowsOverallStandardDeviation", "ZeroCrossingsOverallStandardDeviation",
                     "StrongestBeatOverallStandardDeviation", "BeatSumOverallStandardDeviation", "StrengthOfStrongestBeatOverallStandardDeviation", "LPCOverallStandardDeviation/v/0",
@@ -64,7 +67,7 @@ public class JAudioService {
                     "MethodofMomentsOverallAverage/v/3", "MethodofMomentsOverallAverage/v/4", "AreaMethodofMomentsofMFCCsOverallAverage/v/0",
                     "AreaMethodofMomentsofMFCCsOverallAverage/v/1", "AreaMethodofMomentsofMFCCsOverallAverage/v/2", "AreaMethodofMomentsofMFCCsOverallAverage/v/3",
                     "AreaMethodofMomentsofMFCCsOverallAverage/v/4", "AreaMethodofMomentsofMFCCsOverallAverage/v/5", "AreaMethodofMomentsofMFCCsOverallAverage/v/6",
-                    "AreaMethodofMomentsofMFCCsOverallAverage/v/7", "AreaMethodofMomentsofMFCCsOverallAverage/v/8", "AreaMethodofMomentsofMFCCsOverallAverage/v/9"};
+                    "AreaMethodofMomentsofMFCCsOverallAverage/v/7", "AreaMethodofMomentsofMFCCsOverallAverage/v/8", "AreaMethodofMomentsofMFCCsOverallAverage/v/9"};*/
             writer.writeNext(header);
         }
         ArrayList<String> data = new ArrayList<String>();
@@ -87,7 +90,7 @@ public class JAudioService {
             CSVWriter writer = new CSVWriter(outputfile);
             writer.writeNext(commonUtil.getCSVHeaders());
             for (File file : files.listFiles()) {
-                System.out.println("Processing " + file.getName());
+                log.info("Processing " + file.getName());
                 //extract features
                 commonUtil.extractFeatures(file);
                 //convert features to csv
@@ -96,7 +99,7 @@ public class JAudioService {
             }
             writer.close();
         } catch (Exception e) {
-            System.out.println("Error Occurred while executing extractJAudioFeaturesFromBulkAudioPath");
+            log.info("Error Occurred while executing extractJAudioFeaturesFromBulkAudioPath");
             e.printStackTrace();
         }
     }
