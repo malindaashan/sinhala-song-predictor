@@ -5,6 +5,7 @@ echo "Starting deployment script..."
 fuser -k -n tcp 8080
 
 rm -rf sinhala-song-predictor-ui/build
+{
 
 rm -rf sinhala-song-predictor-backend/src/main/resources/static
 
@@ -37,3 +38,4 @@ cd /opt/research/app/
 nohup java -jar -Dspring.profiles.active=prod sinhala-song-predictor.jar &
 
 echo "Deployment completed"
+} | tee -a /app-script-log.log
