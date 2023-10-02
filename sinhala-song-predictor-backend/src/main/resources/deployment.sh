@@ -6,8 +6,6 @@ fuser -k -n tcp 8080
 
 rm -rf sinhala-song-predictor-ui/build
 
-{
-
 rm -rf sinhala-song-predictor-backend/src/main/resources/static
 
 mkdir sinhala-song-predictor-backend/src/main/resources/static
