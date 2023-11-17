@@ -14,6 +14,7 @@ import DLPredictor from "../dlpredictor/DLPredictor";
 import Clusterer from "../clusterer/Clusterer";
 import DataSetCreator from "../datasetcreator/DataSetCreator";
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
+import NLP from "../nlp/NLP";
 
 const HomeDrawer = () => {
     const [drawerWidth, setDrawerWidth] = useState(230);
@@ -58,9 +59,7 @@ const HomeDrawer = () => {
                                           disablePadding>
                                     <ListItemButton>
                                         <ListItemIcon>
-                                            {index === 0 ? <MicrowaveIcon/> : index === 1 ?
-                                                <BlurOnIcon/> : index === 2 ? <AcUnitIcon/> :
-                                                    <CreateNewFolderIcon/>}
+                                            {index === 0 ? <MicrowaveIcon/> : <AcUnitIcon/>}
                                         </ListItemIcon>
                                         <ListItemText primary={text}/>
                                     </ListItemButton>
@@ -72,8 +71,7 @@ const HomeDrawer = () => {
                 <Box component="main" sx={{flexGrow: 1, p: 3, background: '#ffffff'}}>
                     <Toolbar/>
                     <br/><br/>
-                    {activePage === "ML-PREDICTOR" ? <MLPredictor/> : activePage === "DL-PREDICTOR" ? <DLPredictor/> :
-                        activePage === "CLUSTERER" ? <Clusterer/> : <DataSetCreator/>}
+                    {activePage === "ML-PREDICTOR" ? <MLPredictor/> : <NLP/>}
                 </Box>
             </Box>
         </>
