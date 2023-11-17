@@ -3,9 +3,10 @@ import Box from "@mui/material/Box";
 import {Button, FormControl, Grid, InputLabel, MenuItem, Select, TextareaAutosize} from "@mui/material";
 import NLPPredictorService from "../../service/NLPPredictorService";
 import Loader from "../common/Loader";
+import ResultGrid from "../common/ResultGrid";
 
 const NLP = () => {
-    const [embedding, setEmbedding] = React.useState("One-Hot");
+    const [embedding, setEmbedding] = React.useState("TFIDF");
     const [predictionResponse, setPredictionResponse] = React.useState(null);
     const [songLyrics, setSongLyrics] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
@@ -20,7 +21,6 @@ const NLP = () => {
             .then((response) => {
                 if (response.success) {
                     setPredictionResponse(response.data);
-                    alert(response.data)
                     setLoading(false);
                 } else {
                     alert("Failed");
@@ -56,7 +56,7 @@ const NLP = () => {
                                 value={embedding}
                                 onChange={handleEmbeddingChange}
                             >
-                                <MenuItem value="One-Hot">One-Hot</MenuItem>
+                                <MenuItem value="TFIDF">TFIDF</MenuItem>
                                 <MenuItem value="FastText">FastText</MenuItem>
                                 <MenuItem value="Transformer">Transformer</MenuItem>
                             </Select>
@@ -74,7 +74,7 @@ const NLP = () => {
                     <Button id="nlp-cluster-button-button" size="medium" variant="contained" color='secondary'
                             style={{marginTop: "20px"}} onClick={() => executeNLPClassifier()}>Predict</Button>
                 </Grid>
-                {/*<ResultGrid predictionResponse={predictionResponse}/>*/}
+                <ResultGrid predictionResponse={predictionResponse} type={"nlp"}/>
             </Box>
 
         </>
