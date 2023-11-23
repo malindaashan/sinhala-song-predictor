@@ -9,7 +9,7 @@ def execute_bert(text):
     text = preprocess_text(text)
     print(text)
     output = query({
-        "text": "විදී පිය සෙනෙහසට කව් ගී ලියැවුනා මදී සිරුරේ"
+        "text": text
     })
     print(output)
     return output
