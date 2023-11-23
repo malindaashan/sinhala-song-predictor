@@ -2,7 +2,7 @@ import preprocess as pre
 import requests
 
 API_URL = "https://api-inference.huggingface.co/models/malinda135/xlm-roberta-base-sinhala-song-cls"
-headers = {"Authorization": "Bearer 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", "Content-Type": "application/json"}
+headers = {"Authorization": "Bearer ", "Content-Type": "application/json"}
 
 def execute_bert(text):
     print("Started execute_bert")

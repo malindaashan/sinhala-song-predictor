@@ -55,8 +55,7 @@ public class NLPService {
                 HttpHeaders headers = new HttpHeaders();
                 HttpEntity<NLPRequest> requestEntity = new HttpEntity<>(nlpRequest, headers);
                 ArrayList<BertPredictionResponse> response = restTemplate.postForObject(uri, requestEntity, ArrayList.class);
-                HashMap<String, Double> maxValue = null;
-                if(isHybrid){
+                if(isHybrid.equals(Boolean.TRUE)){
                     return response;
 
                 } else {
