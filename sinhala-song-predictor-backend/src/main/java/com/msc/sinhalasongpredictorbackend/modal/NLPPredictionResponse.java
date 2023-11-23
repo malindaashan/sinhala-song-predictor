@@ -6,5 +6,3 @@ import lombok.Data;
 public class NLPPredictionResponse {
     String prediction;
 }
-
-
