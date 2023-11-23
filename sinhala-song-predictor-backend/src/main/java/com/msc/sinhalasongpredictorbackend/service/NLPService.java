@@ -20,7 +20,7 @@ public class NLPService {
     @Value("${flask.base.url}")
     private String flaskBaseUrl;
     private static String TFIDF = "TFIDF";
-    private static String TRANSFORMERS = "TRANSFORMERS";
+    private static String TRANSFORMER = "TRANSFORMER";
     private static String WORD2VEC = "WORD2VEC";
 
     public String predictNlp(NLPRequest nlpRequest, String embedding) {
@@ -34,7 +34,13 @@ public class NLPService {
                 NLPPredictionResponse response = restTemplate.postForObject(uri, requestEntity, NLPPredictionResponse.class);
                 System.out.println("Success Result is:" + response.getPrediction());
                 return response.getPrediction();
-            } else if(embedding.toUpperCase().equals(TRANSFORMERS)){
+            } else if(embedding.toUpperCase().equals(TRANSFORMER)){
+                URI uri = new URI(flaskBaseUrl+"/bert");
+                HttpHeaders headers = new HttpHeaders();
+                HttpEntity<NLPRequest> requestEntity = new HttpEntity<>(nlpRequest, headers);
+                NLPPredictionResponse response = restTemplate.postForObject(uri, requestEntity, NLPPredictionResponse.class);
+                System.out.println("Success Result is:" + response.getPrediction());
+                return response.getPrediction();
 
             } else if (embedding.toUpperCase().equals(WORD2VEC)) {
 
