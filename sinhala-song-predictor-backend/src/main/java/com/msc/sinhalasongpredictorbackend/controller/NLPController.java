@@ -16,7 +16,7 @@ public class NLPController {
     @PostMapping("/predict")
     public ApiResponse predictNlp(@RequestBody NLPRequest nlpRequest, @RequestParam("embedding") String embedding) {
         System.out.println("Exectured predictNLP with request " + nlpRequest.getText()+"embedding:"+embedding);
-        return new ApiResponse(nlpService.predictNlp(nlpRequest, embedding));
+        return new ApiResponse(nlpService.predictNlp(nlpRequest, embedding, Boolean.FALSE));
 
     }
 }

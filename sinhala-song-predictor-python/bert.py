@@ -1,23 +1,23 @@
-from transformers import pipeline
-
 import preprocess as pre
+import requests
 
+API_URL = "https://api-inference.huggingface.co/models/malinda135/xlm-roberta-base-sinhala-song-cls"
+headers = {"Authorization": "Bearer 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", "Content-Type": "application/json"}
 
 def execute_bert(text):
     print("Started execute_bert")
     text = preprocess_text(text)
-    pipe = init_bert()
-    result = pipe(text)
-
-    predicted_label = result[0]
-    print("From Bert:" + predicted_label)
-    return predicted_label
-
-
-def init_bert():
-    return pipeline("text-classification", model="malinda135/xlm-roberta-base-sinhala-song-cls", return_all_scores=True)
+    print(text)
+    output = query({
+        "text": "විදී පිය සෙනෙහසට කව් ගී ලියැවුනා මදී සිරුරේ"
+    })
+    print(output)
+    return output
 
 
+def query(payload):
+    response = requests.post(API_URL, headers=headers, json=payload)
+    return response.json()
 def preprocess_text(text):
     text = pre.line_break_replace(text)
     text = pre.remove_escape_sequences(text)
