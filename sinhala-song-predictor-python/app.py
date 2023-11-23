@@ -1,5 +1,5 @@
 from flask import Flask, request
-from fasttext import execute_fasttext
+from fasttextrunner import execute_fasttext
 from tfidf import execute_tfidf_svm
 from bert import execute_bert
 

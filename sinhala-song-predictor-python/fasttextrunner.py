@@ -1,12 +1,10 @@
 import preprocess as pre
 import fasttext
-from gensim.models.wrappers import FastText
-
 def execute_fasttext(text):
     print("started executing fasttext")
     text = preprocess_text(text)
     model_path = '/opt/research/fast-text.bin'
-    model = FastText.load_model(model_path)
+    model = fasttext.load_model(model_path)
     prediction = model.predict(text)
     print("fasttext:" + prediction)
     return prediction
