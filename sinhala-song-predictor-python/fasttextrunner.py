@@ -6,7 +6,8 @@ def execute_fasttext(text):
     model_path = '/opt/research/fast-text.bin'
     model = fasttext.load_model(model_path)
     prediction = model.predict(text)
-    print("fasttext:" + prediction)
+    print(prediction);
+    #print("fasttext:" + prediction)
     return prediction
 
 
