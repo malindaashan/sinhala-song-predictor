@@ -23,8 +23,7 @@ def bert():
 @app.route('/nlp/predict/fasttext', methods=['POST'])
 def one_hot():
     text = request.json['text']
-    execute_fasttext(text)
-    return  execute_fasttext(text)
+    return execute_fasttext(text)
 
 if __name__ == '__main__':
     app.run()
