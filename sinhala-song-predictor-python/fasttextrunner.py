@@ -6,12 +6,13 @@ def execute_fasttext(text):
     model_path = '/opt/research/fast-text.bin'
     model = fasttext.load_model(model_path)
     prediction = model.predict(text)
-    print(prediction[0][0]);
+    print(prediction[0][0])
     result=prediction[0][0]
-    finalresult=result.split("__")[1];
-    print("Result Fasttext:"+result.split("__")[1])
-    #print("fasttext:" + prediction)
-    return finalresult
+    finalresult=result.split("__")[2]
+    print("Result Fasttext:"+result.split("__")[2])
+    return {
+        "prediction": finalresult
+    }
 
 
 def preprocess_text(text):
