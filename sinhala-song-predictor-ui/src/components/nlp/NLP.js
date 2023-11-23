@@ -57,7 +57,7 @@ const NLP = () => {
                                 onChange={handleEmbeddingChange}
                             >
                                 <MenuItem value="TFIDF">TFIDF</MenuItem>
-                                <MenuItem value="FastText">FastText</MenuItem>
+                                <MenuItem value="WORD2VEC">WORD2VEC</MenuItem>
                                 <MenuItem value="Transformer">Transformer</MenuItem>
                             </Select>
                         </FormControl>
