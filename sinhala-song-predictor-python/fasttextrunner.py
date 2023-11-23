@@ -7,8 +7,11 @@ def execute_fasttext(text):
     model = fasttext.load_model(model_path)
     prediction = model.predict(text)
     print(prediction[0][0]);
+    result=prediction[0][0]
+    finalresult=result.split("__")[1];
+    print("Result Fasttext:"+result.split("__")[1])
     #print("fasttext:" + prediction)
-    return prediction
+    return finalresult
 
 
 def preprocess_text(text):
