@@ -21,11 +21,16 @@ public class HybridService {
     private static final String RANDOM_FOREST = "Random-Forest";
 
     private static String TRANSFORMER = "TRANSFORMER";
-    public List<PredictionResponse> predictHybrid(NLPRequest nlpRequest, MultipartFile multipartFile) throws Exception {
+    public List<PredictionResponse> predictHybrid(String text, MultipartFile multipartFile,String algorithm, String embedding) throws Exception {
         List<PredictionResponse> predictionResponseList = new ArrayList<>();
-        PredictionResponse predictionResponseMl = classifyService.classifyMusic(multipartFile,RANDOM_FOREST);
-        ArrayList bertPredictionResponse = (ArrayList) nlpService.predictNlp(nlpRequest,TRANSFORMER,Boolean.TRUE);
+        PredictionResponse predictionResponseMl = classifyService.classifyMusic(multipartFile,algorithm);
+        NLPRequest nlpRequest = new NLPRequest();
+        nlpRequest.setText(text);
+        PredictionResponse predictionResponse = (PredictionResponse) nlpService.predictNlp(nlpRequest,embedding,Boolean.TRUE);
+
         predictionResponseList.add(predictionResponseMl);
+        predictionResponseList.add(predictionResponse);
+
         return predictionResponseList;
 
     }

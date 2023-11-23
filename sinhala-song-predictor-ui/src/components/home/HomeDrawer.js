@@ -7,14 +7,11 @@ import {CssBaseline, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListI
 import {MENU_ITEMS} from "../../common/Constants";
 import MicrowaveIcon from '@mui/icons-material/Microwave';
 import AcUnitIcon from '@mui/icons-material/AcUnit';
-import BlurOnIcon from '@mui/icons-material/BlurOn';
 import Box from "@mui/material/Box";
 import MLPredictor from "../mlpredictor/MLPredictor";
-import DLPredictor from "../dlpredictor/DLPredictor";
-import Clusterer from "../clusterer/Clusterer";
-import DataSetCreator from "../datasetcreator/DataSetCreator";
-import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import NLP from "../nlp/NLP";
+import TranslateIcon from '@mui/icons-material/Translate';
+import Hybrid from "../hybrid/Hybrid";
 
 const HomeDrawer = () => {
     const [drawerWidth, setDrawerWidth] = useState(230);
@@ -59,7 +56,8 @@ const HomeDrawer = () => {
                                           disablePadding>
                                     <ListItemButton>
                                         <ListItemIcon>
-                                            {index === 0 ? <MicrowaveIcon/> : <AcUnitIcon/>}
+                                            {index === 0 ? <MicrowaveIcon/> : index === 1 ? <TranslateIcon/> :
+                                                <AcUnitIcon/>}
                                         </ListItemIcon>
                                         <ListItemText primary={text}/>
                                     </ListItemButton>
@@ -71,7 +69,8 @@ const HomeDrawer = () => {
                 <Box component="main" sx={{flexGrow: 1, p: 3, background: '#ffffff'}}>
                     <Toolbar/>
                     <br/><br/>
-                    {activePage === "ML-PREDICTOR" ? <MLPredictor/> : <NLP/>}
+                    {activePage === "ML-PREDICTOR" ? <MLPredictor/> : activePage === "NLP-PREDICTOR" ? <NLP/> :
+                        <Hybrid/>}
                 </Box>
             </Box>
         </>

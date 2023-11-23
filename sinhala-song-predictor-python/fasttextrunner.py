@@ -1,10 +1,11 @@
 import preprocess as pre
-import fasttext
+#import fasttext
 def execute_fasttext(text):
     print("started executing fasttext")
     text = preprocess_text(text)
     model_path = '/opt/research/fast-text.bin'
-    model = fasttext.load_model(model_path)
+    model = ""
+    #model = fasttext.load_model(model_path)
     prediction = model.predict(text)
     print(prediction[0][0])
     result=prediction[0][0]

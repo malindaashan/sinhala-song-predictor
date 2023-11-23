@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.msc.sinhalasongpredictorbackend.modal.BertPredictionResponse;
 import com.msc.sinhalasongpredictorbackend.modal.NLPPredictionResponse;
 import com.msc.sinhalasongpredictorbackend.modal.NLPRequest;
+import com.msc.sinhalasongpredictorbackend.modal.PredictionResponse;
+import com.msc.sinhalasongpredictorbackend.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -13,15 +15,20 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.security.KeyPair;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class NLPService {
 
     @Autowired
     RestTemplate restTemplate;
+
+    @Autowired
+    CommonUtil commonUtil;
 
     @Value("${flask.base.url}")
     private String flaskBaseUrl;
@@ -56,7 +63,19 @@ public class NLPService {
                 HttpEntity<NLPRequest> requestEntity = new HttpEntity<>(nlpRequest, headers);
                 ArrayList<BertPredictionResponse> response = restTemplate.postForObject(uri, requestEntity, ArrayList.class);
                 if(isHybrid.equals(Boolean.TRUE)){
-                    return response;
+                    PredictionResponse predictionResponse = new PredictionResponse();
+                    Map<String,String> map = new HashMap<>();
+                    ObjectMapper mapper = new ObjectMapper();
+                    for(int i=0; i < response.size();i++){
+                        BertPredictionResponse emotion = mapper.convertValue(response.get(i), BertPredictionResponse.class);
+                        DecimalFormat df = new DecimalFormat("#.##");
+                        map.put(emotion.getLabel(), String.valueOf(df.format(emotion.getScore())));
+                    }
+                    BertPredictionResponse bestEmotion = findBestEmotion(response);
+                    Integer emotionInt = commonUtil.getPredictedInteger(bestEmotion.getLabel());
+                    predictionResponse.setPredictedValue(emotionInt);
+                    predictionResponse.setPredictedDistribution(map);
+                    return predictionResponse;
 
                 } else {
                     BertPredictionResponse bestEmotion = findBestEmotion(response);

@@ -347,4 +347,16 @@ public class CommonUtil {
             return "ERROR";
         }
     }
+
+    public static Integer getPredictedInteger(String emotion) {
+        if (emotion.equals(CALM)) {
+            return 0;
+        } else if (emotion.equals(HAPPY)) {
+            return 1;
+        } else if (emotion.equals(SAD)) {
+            return 2;
+        } else {
+            return -1;
+        }
+    }
 }

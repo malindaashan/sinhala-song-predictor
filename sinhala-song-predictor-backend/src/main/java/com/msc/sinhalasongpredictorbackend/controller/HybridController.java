@@ -17,11 +17,12 @@ public class HybridController {
     HybridService hybridService;
 
     @PostMapping(value = "/predict",  consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ApiResponse predictHybrid(@RequestBody NLPRequest nlpRequest,
-                                     @RequestParam("file") MultipartFile multipartFile) {
-        System.out.println("Executed predictHybrid with request " + nlpRequest.getText());
+    public ApiResponse predictHybrid(@RequestParam("text") String text,
+                                     @RequestParam("file") MultipartFile multipartFile, @RequestParam("algorithm") String algorithm,
+                                     @RequestParam("embedding") String embedding) {
+        System.out.println("Executed predictHybrid with request " + embedding +"algorithm"+ algorithm);
         try{
-            return new ApiResponse(hybridService.predictHybrid(nlpRequest,multipartFile));
+            return new ApiResponse(hybridService.predictHybrid(text,multipartFile,algorithm,embedding));
         } catch(Exception e){
             e.printStackTrace();
             return new ApiResponse("Error predictHybrid",e);
