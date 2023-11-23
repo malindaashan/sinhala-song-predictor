@@ -44,6 +44,13 @@ public class NLPService {
 
             } else if (embedding.toUpperCase().equals(WORD2VEC)) {
 
+                URI uri = new URI(flaskBaseUrl+"/fasttext");
+                HttpHeaders headers = new HttpHeaders();
+                HttpEntity<NLPRequest> requestEntity = new HttpEntity<>(nlpRequest, headers);
+                NLPPredictionResponse response = restTemplate.postForObject(uri, requestEntity, NLPPredictionResponse.class);
+                System.out.println("Success Result is:" + response.getPrediction());
+                return response.getPrediction();
+
             }
         } catch (Exception e) {
             e.printStackTrace();
