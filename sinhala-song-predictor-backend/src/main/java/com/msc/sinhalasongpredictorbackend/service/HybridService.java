@@ -1,6 +1,5 @@
 package com.msc.sinhalasongpredictorbackend.service;
 
-import com.msc.sinhalasongpredictorbackend.modal.BertPredictionResponse;
 import com.msc.sinhalasongpredictorbackend.modal.NLPRequest;
 import com.msc.sinhalasongpredictorbackend.modal.PredictionResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,10 @@ public class HybridService {
 
     @Autowired
     NLPService nlpService;
+
+    @Autowired
+    DatabaseService databaseService;
+
     private static final String RANDOM_FOREST = "Random-Forest";
 
     private static String TRANSFORMER = "TRANSFORMER";
@@ -30,7 +33,7 @@ public class HybridService {
 
         predictionResponseList.add(predictionResponseMl);
         predictionResponseList.add(predictionResponse);
-
+        databaseService.saveResults(predictionResponseList,text,multipartFile.getOriginalFilename(),algorithm,embedding);
         return predictionResponseList;
 
     }

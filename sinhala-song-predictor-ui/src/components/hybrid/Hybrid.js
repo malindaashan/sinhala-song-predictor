@@ -6,7 +6,7 @@ import Loader from "../common/Loader";
 import HybridPredictorService from "../../service/HybridPredictorService";
 
 const Hybrid = () => {
-    const [selectedAlgorithm, setSelectedAlgorithm] = React.useState("Random-Forest")
+    const [selectedAlgorithm, setSelectedAlgorithm] = React.useState("SMO")
     const [selectedFile, setSelectedFile] = React.useState();
     const [predictionResponse, setPredictionResponse] = React.useState(null);
     const [loading, setLoading] = React.useState(false);

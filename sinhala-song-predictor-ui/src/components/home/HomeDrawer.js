@@ -12,6 +12,8 @@ import MLPredictor from "../mlpredictor/MLPredictor";
 import NLP from "../nlp/NLP";
 import TranslateIcon from '@mui/icons-material/Translate';
 import Hybrid from "../hybrid/Hybrid";
+import PreviewIcon from '@mui/icons-material/Preview';
+import ViewPredictions from "../viewpredictions/ViewPredictions";
 
 const HomeDrawer = () => {
     const [drawerWidth, setDrawerWidth] = useState(230);
@@ -57,7 +59,8 @@ const HomeDrawer = () => {
                                     <ListItemButton>
                                         <ListItemIcon>
                                             {index === 0 ? <MicrowaveIcon/> : index === 1 ? <TranslateIcon/> :
-                                                <AcUnitIcon/>}
+                                                index === 2?
+                                                <AcUnitIcon/> : <PreviewIcon/>}
                                         </ListItemIcon>
                                         <ListItemText primary={text}/>
                                     </ListItemButton>
@@ -70,7 +73,7 @@ const HomeDrawer = () => {
                     <Toolbar/>
                     <br/><br/>
                     {activePage === "ML-PREDICTOR" ? <MLPredictor/> : activePage === "NLP-PREDICTOR" ? <NLP/> :
-                        <Hybrid/>}
+                       activePage === "HYBRID PREDICTOR"? <Hybrid/> : <ViewPredictions/>}
                 </Box>
             </Box>
         </>
